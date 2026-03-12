@@ -3,93 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <title>My Web Portfolio</title>
-
 <link rel="stylesheet" href="style.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
 
 <nav>
     <h2 class="logo">MyPortfolio</h2>
     <ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#career">Career</a></li>
+        <li><a href="#learning">Learning</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#resources">Resources</a></li>
-        <li><a href="#games">Mini Games</a></li>
+        <li><a href="#games">Games</a></li>
     </ul>
 </nav>
 
 <header>
-    <img src="profile.jpg" class="profile-pic">
-    <h1>Welcome to My Website</h1>
-    <p>Web Apps Developer</p>
+    <img src="profile.jpg" class="profile-pic" alt="My Photo">
+    <h1>Welcome to My Portfolio</h1>
+    <p>Web Application Developer</p>
 </header>
 
 <section id="about">
 <h2>About Me</h2>
 <p>
-I am a web apps developer who focuses on building lightweight and efficient
-web applications using HTML, CSS and JavaScript. I enjoy creating simple,
-functional and visually clean interfaces.
-
-My interest is building tools, learning web technologies and experimenting
-with small interactive features like mini games and browser tools.
+I am a web application developer specializing in HTML, CSS, and JavaScript. I enjoy creating clean, minimalist, and interactive web experiences. I like exploring small games and tools to enhance web functionality and usability.
 </p>
 </section>
 
-<section id="career">
-<h2>Career</h2>
+<section id="learning">
+<h2>Learning</h2>
 <ul>
-<li>Web Application Developer</li>
-<li>Front-End Interface Designer</li>
-<li>JavaScript Application Builder</li>
+<li>Advanced JavaScript Techniques</li>
+<li>Web Performance Optimization</li>
+<li>Front-End Design Principles</li>
+<li>Interactive Web Features</li>
 </ul>
 </section>
 
 <section id="projects">
 <h2>Project Demonstrations</h2>
-
 <div class="project">
 <h3>Task Manager</h3>
-<p>A simple browser based task manager built using JavaScript.</p>
+<p>A lightweight task manager built using JavaScript.</p>
 </div>
 
 <div class="project">
 <h3>Interactive Dashboard</h3>
-<p>A lightweight dashboard for displaying real time data.</p>
+<p>Dashboard with dynamic data updates.</p>
 </div>
 
 <div class="project">
 <h3>Mini Browser Games</h3>
-<p>Small interactive games created using pure JavaScript.</p>
+<p>Small interactive games created with pure JavaScript.</p>
 </div>
-
 </section>
 
 <section id="resources">
 <h2>Upload Resources</h2>
-
 <input type="file" id="fileUpload">
-
 <button onclick="uploadFile()">Upload</button>
-
 <p id="uploadStatus"></p>
-
 </section>
 
 <section id="games">
 <h2>Mini Game</h2>
-
 <p>Click the button as fast as you can!</p>
-
 <button onclick="increaseScore()">Click Me</button>
-
 <p>Score: <span id="score">0</span></p>
-
 </section>
 
 <footer>
@@ -97,6 +79,5 @@ with small interactive features like mini games and browser tools.
 </footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
