@@ -1,83 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<title>My Web Portfolio</title>
+<title>Mingmei Zhang Portfolio</title>
+
 <link rel="stylesheet" href="style.css">
+
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
 
 <nav>
-    <h2 class="logo">MyPortfolio</h2>
-    <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#learning">Learning</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#resources">Resources</a></li>
-        <li><a href="#games">Games</a></li>
-    </ul>
+<h2 class="logo">Mingmei Zhang</h2>
+
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#learning">Learning</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#games">Games</a></li>
+</ul>
+
 </nav>
 
+
 <header>
-    <img src="profile.jpg" class="profile-pic" alt="My Photo">
-    <h1>Welcome to My Portfolio</h1>
-    <p>Web Application Developer</p>
+
+<img src="profile.jpg" class="profile">
+
+<h1>Hello, I'm Mingmei Zhang</h1>
+
+<p>FCIS Student | Web Application Developer</p>
+
 </header>
 
+
 <section id="about">
+
 <h2>About Me</h2>
+
 <p>
-I am a web application developer specializing in HTML, CSS, and JavaScript. I enjoy creating clean, minimalist, and interactive web experiences. I like exploring small games and tools to enhance web functionality and usability.
+My name is Mingmei Zhang and I am a student at FCIS. 
+I am interested in web application development and enjoy building websites using simple technologies such as HTML, CSS, and JavaScript.
+
+I like designing clean and minimalist webpages and experimenting with interactive elements like small games and useful web tools.
 </p>
+
 </section>
+
 
 <section id="learning">
+
 <h2>Learning</h2>
+
 <ul>
-<li>Advanced JavaScript Techniques</li>
-<li>Web Performance Optimization</li>
-<li>Front-End Design Principles</li>
-<li>Interactive Web Features</li>
+
+<li>HTML webpage structure</li>
+
+<li>CSS layout and minimalist design</li>
+
+<li>JavaScript interactive features</li>
+
+<li>Front-end web development</li>
+
 </ul>
+
 </section>
+
 
 <section id="projects">
-<h2>Project Demonstrations</h2>
-<div class="project">
-<h3>Task Manager</h3>
-<p>A lightweight task manager built using JavaScript.</p>
+
+<h2>Project Demo</h2>
+
+<div class="card">
+
+<h3>Portfolio Website</h3>
+
+<p>A personal website built with HTML, CSS and JavaScript.</p>
+
 </div>
 
-<div class="project">
-<h3>Interactive Dashboard</h3>
-<p>Dashboard with dynamic data updates.</p>
+<div class="card">
+
+<h3>Simple Task Tool</h3>
+
+<p>A small JavaScript tool to manage simple tasks.</p>
+
 </div>
 
-<div class="project">
-<h3>Mini Browser Games</h3>
-<p>Small interactive games created with pure JavaScript.</p>
-</div>
 </section>
+
 
 <section id="resources">
-<h2>Upload Resources</h2>
-<input type="file" id="fileUpload">
-<button onclick="uploadFile()">Upload</button>
-<p id="uploadStatus"></p>
+
+<h2>Uploaded Resources</h2>
+
+<input type="file" id="fileInput">
+
+<button onclick="upload()">Upload</button>
+
+<p id="status"></p>
+
 </section>
+
 
 <section id="games">
+
 <h2>Mini Game</h2>
-<p>Click the button as fast as you can!</p>
-<button onclick="increaseScore()">Click Me</button>
+
+<p>Click the button to increase your score.</p>
+
+<button onclick="addScore()">Click</button>
+
 <p>Score: <span id="score">0</span></p>
+
 </section>
 
+
 <footer>
-<p>© 2026 My Portfolio</p>
+
+<p>© 2026 Mingmei Zhang</p>
+
 </footer>
 
+
 <script src="script.js"></script>
+
 </body>
+
 </html>
