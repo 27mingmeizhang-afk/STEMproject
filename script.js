@@ -8,7 +8,6 @@ document.getElementById("score").innerText = score;
 
 }
 
-
 function upload(){
 
 let file = document.getElementById("fileInput").files[0];
