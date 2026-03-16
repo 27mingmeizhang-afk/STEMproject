@@ -14,15 +14,13 @@ let file = document.getElementById("fileInput").files[0];
 
 if(file){
 
-document.getElementById("status").innerText =
-"Uploaded: " + file.name;
+document.getElementById("status").innerText = "Uploaded: " + file.name;
 
 }
 
 else{
 
-document.getElementById("status").innerText =
-"Please choose a file.";
+document.getElementById("status").innerText = "Please choose a file.";
 
 }
 
