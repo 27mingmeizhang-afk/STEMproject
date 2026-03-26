@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -67,7 +67,7 @@ header p {
 
 /* SECTION */
 section {
-    max-width: 900px;
+    max-width: 800px;
     margin: 60px auto;
     padding: 0 20px;
 }
@@ -78,18 +78,13 @@ h2 {
     color: var(--primary);
 }
 
-/* CARD */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-}
-
+/* CARD（改成一列） */
 .card {
     background: var(--card);
     padding: 25px;
     border-radius: 16px;
     box-shadow: 0 8px 25px rgba(232,156,174,0.15);
+    margin-bottom: 20px;
     transition: 0.3s;
 }
 
@@ -142,6 +137,7 @@ footer {
     <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#hobbies">Hobbies</a></li>
+        <li><a href="#subjects">Subjects</a></li>
         <li><a href="#game">Game</a></li>
     </ul>
 </nav>
@@ -163,21 +159,49 @@ footer {
 <section id="hobbies">
     <h2>Hobbies</h2>
 
-    <div class="grid">
-        <div class="card">
-            <h3>Sports</h3>
-            <p>I enjoy staying active and healthy through sports.</p>
-        </div>
+    <div class="card">
+        <h3>Sports</h3>
+        <p>I enjoy staying active and healthy through sports.</p>
+    </div>
 
-        <div class="card">
-            <h3>Internet</h3>
-            <p>I like exploring interesting content online.</p>
-        </div>
+    <div class="card">
+        <h3>Internet</h3>
+        <p>I like exploring interesting content online.</p>
+    </div>
 
-        <div class="card">
-            <h3>Friends</h3>
-            <p>Spending time with my friends makes me happiest.</p>
-        </div>
+    <div class="card">
+        <h3>Friends</h3>
+        <p>Spending time with my friends makes me happiest.</p>
+    </div>
+
+</section>
+
+<section id="subjects">
+    <h2>Subjects</h2>
+
+    <div class="card">
+        <h3>Psychology</h3>
+        <p>I am interested in understanding human behavior and emotions.</p>
+    </div>
+
+    <div class="card">
+        <h3>Environmental Science</h3>
+        <p>I learn about the environment and how to protect our planet.</p>
+    </div>
+
+    <div class="card">
+        <h3>Mathematics</h3>
+        <p>I develop problem-solving and logical thinking skills.</p>
+    </div>
+
+    <div class="card">
+        <h3>English</h3>
+        <p>I improve my communication and writing abilities.</p>
+    </div>
+
+    <div class="card">
+        <h3>STEM</h3>
+        <p>I explore science, technology, engineering, and math in real-life applications.</p>
     </div>
 
 </section>
