@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,15 +7,17 @@
 
 <style>
 :root {
-    --deep-red: #600f18;
-    --sakura-pink: #FFD1DC;
-    --text-gray: #333;
+    --primary: #0f172a;
+    --accent: #3b82f6;
+    --light: #f1f5f9;
+    --text: #1e293b;
 }
 
 body {
     margin: 0;
-    font-family: 'Calibri', sans-serif;
-    color: var(--text-gray);
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--light);
+    color: var(--text);
 }
 
 /* NAV */
@@ -23,12 +25,13 @@ nav {
     display: flex;
     justify-content: space-between;
     padding: 20px 60px;
-    border-bottom: 1px solid var(--sakura-pink);
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .logo {
-    color: var(--deep-red);
     font-weight: bold;
+    color: var(--primary);
 }
 
 nav ul {
@@ -39,69 +42,87 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    color: var(--text-gray);
+    color: var(--text);
 }
 
 nav a:hover {
-    color: var(--deep-red);
+    color: var(--accent);
 }
 
 /* HEADER */
 header {
     text-align: center;
-    padding: 80px 20px;
-    background: linear-gradient(var(--sakura-pink), white);
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
 }
 
 header h1 {
-    color: var(--deep-red);
-    font-size: 2.5rem;
-}
-
-header p {
-    color: var(--deep-red);
+    font-size: 3rem;
+    margin: 10px 0;
 }
 
 /* SECTION */
 section {
-    max-width: 700px;
+    max-width: 900px;
     margin: 60px auto;
     padding: 0 20px;
 }
 
 h2 {
     text-align: center;
-    color: var(--deep-red);
+    margin-bottom: 40px;
 }
 
-/* CARD */
+/* CARD GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
 .card {
-    border: 1px solid var(--sakura-pink);
+    background: white;
     padding: 25px;
-    margin: 15px 0;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
 }
 
 /* BUTTON */
 button {
-    background: var(--deep-red);
+    background: var(--accent);
     color: white;
-    padding: 12px 30px;
     border: none;
+    padding: 12px 25px;
     border-radius: 20px;
     cursor: pointer;
 }
 
-/* GAME */
-.score {
-    font-size: 3rem;
-    color: var(--deep-red);
+button:hover {
+    opacity: 0.8;
 }
 
+/* GAME */
+.game {
+    text-align: center;
+}
+
+.score {
+    font-size: 4rem;
+    margin: 20px 0;
+    color: var(--accent);
+}
+
+/* FOOTER */
 footer {
     text-align: center;
     padding: 40px;
-    color: #999;
+    color: #888;
 }
 </style>
 </head>
@@ -113,7 +134,7 @@ footer {
     <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#hobbies">Hobbies</a></li>
-        <li><a href="#projects">Projects</a></li>
+        <li><a href="#game">Game</a></li>
     </ul>
 </nav>
 
@@ -124,39 +145,44 @@ footer {
 
 <section id="about">
     <h2>About Me</h2>
-    <p>
-        My name is Mingmei, and I am currently a Grade 11 student at Forest City International School. 
-        I enjoy doing sports to stay active and healthy, and I also like browsing the internet to explore new ideas. 
-        In my free time, I love spending time with my friends and sharing fun moments together. 
-        These activities make my life more meaningful and enjoyable.
+    <p style="text-align:center;">
+        My name is Mingmei, and I am a Grade 11 student at Forest City International School. 
+        I enjoy sports, exploring the internet, and spending time with my friends. 
+        These activities make my daily life more enjoyable and meaningful.
     </p>
 </section>
 
 <section id="hobbies">
     <h2>Hobbies</h2>
 
-    <div class="card">
-        <h3>Sports</h3>
-        <p>I enjoy doing sports because it helps me stay active and energetic.</p>
-    </div>
+    <div class="grid">
+        <div class="card">
+            <h3>Sports</h3>
+            <p>I enjoy doing sports to stay active and healthy.</p>
+        </div>
 
-    <div class="card">
-        <h3>Internet</h3>
-        <p>I like exploring the internet and discovering new and interesting content.</p>
-    </div>
+        <div class="card">
+            <h3>Internet</h3>
+            <p>I like browsing the internet and discovering new things.</p>
+        </div>
 
-    <div class="card">
-        <h3>Friends</h3>
-        <p>Spending time with my friends is one of the happiest parts of my life.</p>
+        <div class="card">
+            <h3>Friends</h3>
+            <p>I love spending time with my friends and having fun together.</p>
+        </div>
     </div>
 
 </section>
 
-<section id="projects">
+<section id="game">
     <h2>Mini Game</h2>
-    <p>Click the button to increase your score!</p>
-    <div class="score" id="score">0</div>
-    <button onclick="addScore()">Click Me</button>
+
+    <div class="game">
+        <p>Click the button!</p>
+        <div class="score" id="score">0</div>
+        <button onclick="addScore()">Click</button>
+    </div>
+
 </section>
 
 <footer>
