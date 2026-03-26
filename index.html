@@ -7,16 +7,17 @@
 
 <style>
 :root {
-    --primary: #0f172a;
-    --accent: #3b82f6;
-    --light: #f1f5f9;
-    --text: #1e293b;
+    --bg: #fff9fb;
+    --card: #ffffff;
+    --primary: #e89cae;
+    --text: #444;
+    --soft: #f7e6ea;
 }
 
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: var(--light);
+    background: var(--bg);
     color: var(--text);
 }
 
@@ -26,7 +27,7 @@ nav {
     justify-content: space-between;
     padding: 20px 60px;
     background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--soft);
 }
 
 .logo {
@@ -46,20 +47,22 @@ nav a {
 }
 
 nav a:hover {
-    color: var(--accent);
+    color: var(--primary);
 }
 
 /* HEADER */
 header {
     text-align: center;
     padding: 100px 20px;
-    background: linear-gradient(135deg, #3b82f6, #6366f1);
-    color: white;
 }
 
 header h1 {
-    font-size: 3rem;
-    margin: 10px 0;
+    font-size: 2.5rem;
+    color: var(--primary);
+}
+
+header p {
+    opacity: 0.7;
 }
 
 /* SECTION */
@@ -72,20 +75,21 @@ section {
 h2 {
     text-align: center;
     margin-bottom: 40px;
+    color: var(--primary);
 }
 
-/* CARD GRID */
+/* CARD */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    gap: 25px;
 }
 
 .card {
-    background: white;
+    background: var(--card);
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(232,156,174,0.15);
     transition: 0.3s;
 }
 
@@ -93,13 +97,28 @@ h2 {
     transform: translateY(-5px);
 }
 
+/* GAME */
+.game {
+    text-align: center;
+    background: var(--card);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(232,156,174,0.15);
+}
+
+.score {
+    font-size: 4rem;
+    color: var(--primary);
+    margin: 20px 0;
+}
+
 /* BUTTON */
 button {
-    background: var(--accent);
+    background: var(--primary);
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
     cursor: pointer;
 }
 
@@ -107,22 +126,11 @@ button:hover {
     opacity: 0.8;
 }
 
-/* GAME */
-.game {
-    text-align: center;
-}
-
-.score {
-    font-size: 4rem;
-    margin: 20px 0;
-    color: var(--accent);
-}
-
 /* FOOTER */
 footer {
     text-align: center;
     padding: 40px;
-    color: #888;
+    color: #aaa;
 }
 </style>
 </head>
@@ -147,8 +155,8 @@ footer {
     <h2>About Me</h2>
     <p style="text-align:center;">
         My name is Mingmei, and I am a Grade 11 student at Forest City International School. 
-        I enjoy sports, exploring the internet, and spending time with my friends. 
-        These activities make my daily life more enjoyable and meaningful.
+        I enjoy sports, browsing the internet, and spending time with my friends. 
+        These moments make my daily life more enjoyable and meaningful.
     </p>
 </section>
 
@@ -158,17 +166,17 @@ footer {
     <div class="grid">
         <div class="card">
             <h3>Sports</h3>
-            <p>I enjoy doing sports to stay active and healthy.</p>
+            <p>I enjoy staying active and healthy through sports.</p>
         </div>
 
         <div class="card">
             <h3>Internet</h3>
-            <p>I like browsing the internet and discovering new things.</p>
+            <p>I like exploring interesting content online.</p>
         </div>
 
         <div class="card">
             <h3>Friends</h3>
-            <p>I love spending time with my friends and having fun together.</p>
+            <p>Spending time with my friends makes me happiest.</p>
         </div>
     </div>
 
@@ -178,7 +186,7 @@ footer {
     <h2>Mini Game</h2>
 
     <div class="game">
-        <p>Click the button!</p>
+        <p>Click to increase your score</p>
         <div class="score" id="score">0</div>
         <button onclick="addScore()">Click</button>
     </div>
