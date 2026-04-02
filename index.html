@@ -1,233 +1,674 @@
-   <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mingmei | Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Note Maker & AI Tutor</title>
+    <style>
+        /* --- DESIGN SYSTEM --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --accent-pink: #ff85a2;
+            --accent-deep: #ff5c83;
+            --text-main: #5a5a5a;
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --blur: 12px;
+        }
 
-<style>
-:root {
-    --bg: #fff9fb;
-    --card: #ffffff;
-    --primary: #e89cae;
-    --text: #444;
-    --soft: #f7e6ea;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-/* NAV */
-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px 60px;
-    background: white;
-    border-bottom: 1px solid var(--soft);
-}
+        /* --- GLASSMORPHISM --- */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur));
+            -webkit-backdrop-filter: blur(var(--blur));
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-.logo {
-    font-weight: bold;
-    color: var(--primary);
-}
+        /* --- LAYOUT --- */
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
 
-nav ul {
-    display: flex;
-    gap: 30px;
-    list-style: none;
-}
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            animation: fadeInDown 0.6s ease-out;
+        }
 
-nav a {
-    text-decoration: none;
-    color: var(--text);
-}
+        .logo {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--accent-pink);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            cursor: pointer;
+            display: inline-block;
+        }
+        .logo:hover { transform: scale(1.05); }
 
-nav a:hover {
-    color: var(--primary);
-}
+        /* --- VIEWS --- */
+        .view {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
 
-/* HEADER */
-header {
-    text-align: center;
-    padding: 100px 20px;
-}
+        .view.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-header h1 {
-    font-size: 2.5rem;
-    color: var(--primary);
-}
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-header p {
-    opacity: 0.7;
-}
+        /* --- HOME: SUBJECT GRID --- */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
 
-/* SECTION */
-section {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 20px;
-}
+        .subject-card {
+            padding: 2.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
 
-h2 {
-    text-align: center;
-    margin-bottom: 40px;
-    color: var(--primary);
-}
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(255,133,162,0.25);
+            background: rgba(255,255,255,0.6);
+        }
 
-/* CARD（改成一列） */
-.card {
-    background: var(--card);
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(232,156,174,0.15);
-    margin-bottom: 20px;
-    transition: 0.3s;
-}
+        .subject-card .icon { font-size: 3rem; margin-bottom: 0.8rem; display: block; transition: transform 0.3s; }
+        .subject-card:hover .icon { transform: scale(1.2); }
+        .subject-card h3 { font-size: 1.2rem; color: #444; letter-spacing: 0.5px; }
 
-.card:hover {
-    transform: translateY(-5px);
-}
+        /* --- DETAIL: CALENDAR & NOTES --- */
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
 
-/* GAME */
-.game {
-    text-align: center;
-    background: var(--card);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(232,156,174,0.15);
-}
+        .back-btn {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid var(--glass-border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            color: var(--accent-pink);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .back-btn:hover { background: white; transform: scale(1.05); }
 
-.score {
-    font-size: 4rem;
-    color: var(--primary);
-    margin: 20px 0;
-}
+        .subject-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+        }
 
-/* BUTTON */
-button {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    cursor: pointer;
-}
+        /* Calendar */
+        .calendar-widget { padding: 1.5rem; height: fit-content; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; font-weight: 600; }
+        .cal-nav { cursor: pointer; padding: 5px 10px; border-radius: 50%; transition: background 0.2s; color: var(--accent-pink); user-select: none; }
+        .cal-nav:hover { background: rgba(255,133,162,0.1); }
+        
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
+        .cal-day-name { font-size: 0.75rem; color: #999; margin-bottom: 0.5rem; font-weight: bold; }
 
-button:hover {
-    opacity: 0.8;
-}
+        .cal-day {
+            padding: 0.5rem;
+            font-size: 0.95rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            aspect-ratio: 1;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            color: #555;
+        }
 
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 40px;
-    color: #aaa;
-}
-</style>
+        .cal-day:hover { background: rgba(255, 133, 162, 0.15); }
+        .cal-day.active { background: var(--accent-pink); color: white; font-weight: bold; box-shadow: 0 4px 10px rgba(255,133,162,0.3); }
+        .cal-day.faded { opacity: 0.3; pointer-events: none; }
+
+        .cal-day.has-notes::after {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .cal-day.active.has-notes::after { background: white; }
+
+        /* Notes Area */
+        .notes-area { padding: 1.5rem; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; }
+        .date-display { font-size: 1.3rem; color: var(--accent-pink); border-bottom: 2px solid rgba(255,133,162,0.2); padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-weight: 600; }
+
+        /* Form */
+        .note-form { margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 0.8rem; }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.5);
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .input-group input:focus, .input-group textarea:focus { background: white; border-color: var(--accent-pink); box-shadow: 0 0 0 3px rgba(255,133,162,0.1); }
+
+        .btn-save { background: var(--accent-pink); color: white; border: none; padding: 0.8rem; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.2s; }
+        .btn-save:hover { background: var(--accent-deep); transform: translateY(-1px); }
+        .btn-update { background: #ff5c83; }
+
+        /* Note Item */
+        .note-item {
+            background: rgba(255,255,255,0.4);
+            border-left: 4px solid var(--accent-pink);
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 0 12px 12px 0;
+            position: relative;
+            transition: all 0.2s;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .note-item h4 { marginBottom: '0.3rem'; color: #444; }
+        .note-item p { font-size: 0.9rem; color: #666; white-space: pre-wrap; line-height: 1.5; }
+        .note-actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; }
+        .btn-icon { background: none; border: none; cursor: pointer; font-size: 1rem; opacity: 0.5; transition: all 0.2s; }
+        .btn-icon:hover { opacity: 1; transform: scale(1.1); color: var(--accent-pink); }
+
+        /* --- AI ASSISTANT --- */
+        .ai-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            color: white;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255,133,162,0.4);
+            z-index: 1000;
+            transition: transform 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ai-btn:hover { transform: scale(1.1); }
+
+        .ai-window {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            width: 380px;
+            height: 550px;
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+        }
+        .ai-window.open { display: flex; animation: slideUp 0.3s ease-out; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ai-header { background: rgba(255, 133, 162, 0.9); padding: 1rem 1.5rem; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .ai-header h3 { font-size: 1rem; font-weight: 600; }
+        .ai-header-actions { display: flex; gap: 10px; }
+        .ai-header-actions span { cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
+        .ai-header-actions span:hover { opacity: 1; }
+
+        .chat-area { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: rgba(255,255,255,0.2); }
+        
+        .msg { max-width: 85%; padding: 0.8rem 1rem; border-radius: 12px; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); line-height: 1.4; white-space: pre-wrap; }
+        .msg-user { background: white; align-self: flex-end; border: 1px solid #eee; }
+        .msg-ai { background: rgba(255, 209, 220, 0.7); align-self: flex-start; border: 1px solid rgba(255,255,255,0.5); }
+
+        .ai-input-area { padding: 1rem; background: rgba(255,255,255,0.4); display: flex; gap: 0.5rem; border-top: 1px solid rgba(255,255,255,0.5); }
+        .ai-input-area input { flex: 1; border: 1px solid #eee; border-radius: 20px; padding: 0.7rem 1rem; outline: none; background: rgba(255,255,255,0.8); font-size: 0.9rem; }
+        .ai-input-area button { background: var(--accent-pink); color: white; border: none; padding: 0 1.2rem; border-radius: 20px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
+        .ai-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* API Key Modal */
+        .settings-modal {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 1.5rem; border-radius: 15px; width: 300px;
+            display: none; flex-direction: column; gap: 1rem; z-index: 1001; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .settings-modal.active { display: flex; }
+        .settings-input { padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; width: 100%; }
+        .btn-save-key { background: var(--accent-pink); color: white; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .subject-layout { grid-template-columns: 1fr; }
+            .calendar-widget { margin-bottom: 1rem; }
+            .ai-window { width: 95%; right: 2.5%; height: 60vh; bottom: 80px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<nav>
-    <div class="logo">Mingmei</div>
-    <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#hobbies">Hobbies</a></li>
-        <li><a href="#subjects">Subjects</a></li>
-        <li><a href="#game">Game</a></li>
-    </ul>
-</nav>
+<div class="app-container">
+    <header>
+        <div class="logo" onclick="navigate('home')">✿ Smart Notes</div>
+        <p style="color: #777; margin-top: 5px;">Organize & Learn with AI</p>
+    </header>
 
-<header>
-    <h1>Mingmei</h1>
-    <p>G11 Student | Forest City International School</p>
-</header>
-
-<section id="about">
-    <h2>About Me</h2>
-    <p style="text-align:center;">
-        My name is Mingmei, and I am a Grade 11 student at Forest City International School. 
-        I enjoy sports, browsing the internet, and spending time with my friends. 
-        These moments make my daily life more enjoyable and meaningful.
-    </p>
-</section>
-
-<section id="hobbies">
-    <h2>Hobbies</h2>
-
-    <div class="card">
-        <h3>Sports</h3>
-        <p>I enjoy staying active and healthy through sports.</p>
+    <!-- VIEW 1: HOME -->
+    <div id="view-home" class="view active">
+        <div class="subjects-grid">
+            <div class="glass subject-card" onclick="openSubject('Math')"><span class="icon">📐</span><h3>Math</h3></div>
+            <div class="glass subject-card" onclick="openSubject('English')"><span class="icon">📖</span><h3>English</h3></div>
+            <div class="glass subject-card" onclick="openSubject('Psychology')"><span class="icon">🧠</span><h3>Psychology</h3></div>
+            <div class="glass subject-card" onclick="openSubject('Environmental Science')"><span class="icon">🌱</span><h3>Env. Science</h3></div>
+            <div class="glass subject-card" onclick="openSubject('Social Studies')"><span class="icon">🌍</span><h3>Social Studies</h3></div>
+            <div class="glass subject-card" onclick="openSubject('Self-Study')"><span class="icon">📚</span><h3>Self-Study</h3></div>
+            <div class="glass subject-card" onclick="openSubject('Free Note')"><span class="icon">📝</span><h3>Free Note</h3></div>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>Internet</h3>
-        <p>I like exploring interesting content online.</p>
+    <!-- VIEW 2: DETAIL -->
+    <div id="view-detail" class="view">
+        <div class="detail-header">
+            <button class="back-btn" onclick="navigate('home')">← Back</button>
+            <h2 id="page-title" style="color: var(--accent-pink);">Subject Name</h2>
+            <div style="width: 60px;"></div>
+        </div>
+
+        <div class="subject-layout">
+            <!-- Calendar -->
+            <div class="glass calendar-widget">
+                <div class="calendar-header">
+                    <span class="cal-nav" onclick="changeMonth(-1)">❮</span>
+                    <span id="cal-header">Month 2024</span>
+                    <span class="cal-nav" onclick="changeMonth(1)">❯</span>
+                </div>
+                <div class="calendar-grid" id="cal-grid"></div>
+            </div>
+
+            <!-- Notes -->
+            <div class="glass notes-area">
+                <div class="date-display" id="date-display">Select a Date</div>
+                
+                <!-- Form -->
+                <div class="note-form">
+                    <input type="hidden" id="edit-id">
+                    <div class="input-group">
+                        <input type="text" id="note-title" placeholder="Topic Title (e.g., Quadratic Equations)">
+                    </div>
+                    <div class="input-group">
+                        <textarea id="note-content" rows="4" placeholder="Write your notes or questions here..."></textarea>
+                    </div>
+                    <button class="btn-save" onclick="saveNote()">Add Note</button>
+                </div>
+
+                <div id="notes-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI WIDGET -->
+<button class="ai-btn" onclick="toggleAI()">🤖</button>
+<div id="ai-window" class="glass ai-window">
+    <div class="ai-header">
+        <h3>AI Study Tutor</h3>
+        <div class="ai-header-actions">
+            <span onclick="openSettings()" title="Settings">⚙️</span>
+            <span onclick="toggleAI()">✕</span>
+        </div>
+    </div>
+    
+    <!-- Settings Modal (Hidden by default) -->
+    <div id="settings-modal" class="settings-modal">
+        <h4>API Configuration</h4>
+        <p style="font-size: 0.8rem; color: #666;">Enter your OpenAI API Key to enable real reasoning. Key is stored only in your browser session.</p>
+        <input type="password" id="api-key-input" class="settings-input" placeholder="sk-...">
+        <button class="btn-save-key" onclick="saveApiKey()">Save Key</button>
     </div>
 
-    <div class="card">
-        <h3>Friends</h3>
-        <p>Spending time with my friends makes me happiest.</p>
+    
+    <div class="chat-area" id="chat-area">
+        <div class="msg msg-ai">Hello! I'm your AI Tutor. If you add an API Key in settings, I can explain complex concepts, solve math steps, and help you study. Without a key, I can only do basic searches.</div>
     </div>
-
-</section>
-
-<section id="subjects">
-    <h2>Subjects</h2>
-
-    <div class="card">
-        <h3>Psychology</h3>
-        <p>I am interested in understanding human behavior and emotions.</p>
+    <div class="ai-input-area">
+        <input type="text" id="ai-input" placeholder="Explain this concept..." onkeypress="if(event.key==='Enter')askAI()">
+        <button onclick="askAI()">Send</button>
     </div>
-
-    <div class="card">
-        <h3>Environmental Science</h3>
-        <p>I learn about the environment and how to protect our planet.</p>
-    </div>
-
-    <div class="card">
-        <h3>Mathematics</h3>
-        <p>I develop problem-solving and logical thinking skills.</p>
-    </div>
-
-    <div class="card">
-        <h3>English</h3>
-        <p>I improve my communication and writing abilities.</p>
-    </div>
-
-    <div class="card">
-        <h3>STEM</h3>
-        <p>I explore science, technology, engineering, and math in real-life applications.</p>
-    </div>
-
-</section>
-
-<section id="game">
-    <h2>Mini Game</h2>
-
-    <div class="game">
-        <p>Click to increase your score</p>
-        <div class="score" id="score">0</div>
-        <button onclick="addScore()">Click</button>
-    </div>
-
-</section>
-
-<footer>
-    <p>© 2026 Mingmei</p>
-</footer>
+</div>
 
 <script>
-let score = 0;
-function addScore() {
-    score++;
-    document.getElementById("score").innerText = score;
-}
-</script>
+    // --- 1. DATA PERSISTENCE ---
+    // Structure: { "Math": { "2023-10-27": [ {id, title, content}, ... ] } }
+    let DB = JSON.parse(localStorage.getItem('smartNotesDB')) || {};
+    const SUBJECTS = ['Math', 'English', 'Psychology', 'Environmental Science', 'Social Studies', 'Self-Study', 'Free Note'];
+    
+    let currentSubject = '';
+    let currentDate = new Date();
+    let viewDate = new Date();
 
+    // --- 2. ROUTER ---
+    function navigate(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(`view-${viewId}`).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // --- 3. SUBJECT & CALENDAR LOGIC ---
+    function openSubject(sub) {
+        currentSubject = sub;
+        if (!DB[sub]) DB[sub] = {};
+        
+        document.getElementById('page-title').innerText = sub;
+        currentDate = new Date();
+        viewDate = new Date();
+        
+        renderCalendar();
+        renderNotes();
+        navigate('detail');
+    }
+
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    function renderCalendar() {
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        
+        document.getElementById('cal-header').innerText = `${months[month]} ${year}`;
+        
+        const grid = document.getElementById('cal-grid');
+        grid.innerHTML = '';
+
+        // Day Names
+        ['S','M','T','W','T','F','S'].forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
+
+        // First day logic
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const daysInMonth = 32 - new Date(year, month, 32).getDate();
+        const selectedStr = currentDate.toISOString().split('T')[0];
+
+        // Padding
+        for (let i=0; i<firstDayIndex; i++) grid.innerHTML += `<div class="cal-day faded"></div>`;
+
+        // Days
+        for (let i=1; i<=daysInMonth; i++) {
+            const tempDate = new Date(year, month, i);
+            const dateStr = tempDate.toISOString().split('T')[0];
+            
+            const hasNotes = DB[currentSubject] && DB[currentSubject][dateStr] && DB[currentSubject][dateStr].length > 0;
+            const isSelected = dateStr === selectedStr;
+
+            grid.innerHTML += `<div class="cal-day ${isSelected?'active':''} ${hasNotes?'has-notes':''}" onclick="selectDate('${dateStr}')">${i}</div>`;
+        }
+    }
+
+    function changeMonth(delta) {
+        viewDate.setMonth(viewDate.getMonth() + delta);
+        renderCalendar();
+    }
+
+    function selectDate(dateStr) {
+        currentDate = new Date(dateStr + 'T00:00:00');
+        renderCalendar();
+        renderNotes();
+    }
+
+    // --- 4. NOTES CRUD ---
+    function renderNotes() {
+        const dateStr = currentDate.toISOString().split('T')[0];
+        const notes = (DB[currentSubject] && DB[currentSubject][dateStr]) ? DB[currentSubject][dateStr] : [];
+        
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date-display').innerText = currentDate.toLocaleDateString('en-US', options);
+
+        const list = document.getElementById('notes-list');
+        
+        if (notes.length === 0) {
+            list.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">No notes for this day.</p>';
+        } else {
+            list.innerHTML = notes.map(n => `
+                <div class="note-item">
+                    <div class="note-actions">
+                        <button class="btn-icon" onclick="editNote('${n.id}', '${n.title.replace(/'/g, "\\'")}', '${n.content.replace(/'/g, "\\'")}')">✎</button>
+                        <button class="btn-icon" onclick="deleteNote('${n.id}')">🗑</button>
+                    </div>
+                    <h4>${n.title}</h4>
+                    <p>${n.content}</p>
+                </div>
+            `).join('');
+        }
+        clearForm();
+    }
+
+    function saveNote() {
+        const title = document.getElementById('note-title').value.trim();
+        const content = document.getElementById('note-content').value.trim();
+        const editId = document.getElementById('edit-id').value;
+        const dateStr = currentDate.toISOString().split('T')[0];
+
+        if (!title || !content) return alert('Please enter both title and content.');
+
+        if (!DB[currentSubject][dateStr]) DB[currentSubject][dateStr] = [];
+
+        if (editId) {
+            // Update
+            const idx = DB[currentSubject][dateStr].findIndex(n => n.id == editId);
+            if (idx !== -1) {
+                DB[currentSubject][dateStr][idx].title = title;
+                DB[currentSubject][dateStr][idx].content = content;
+            }
+        } else {
+            // Create
+            DB[currentSubject][dateStr].push({
+                id: Date.now(),
+                title,
+                content
+            });
+        }
+
+        localStorage.setItem('smartNotesDB', JSON.stringify(DB));
+        renderCalendar();
+        renderNotes();
+    }
+
+    function editNote(id, title, content) {
+        document.getElementById('note-title').value = title;
+        document.getElementById('note-content').value = content;
+        document.getElementById('edit-id').value = id;
+        
+        const btn = document.querySelector('.btn-save');
+        btn.innerText = "Update Note";
+        btn.classList.add('btn-update');
+        
+        window.scrollTo(0, 0);
+    }
+
+    function deleteNote(id) {
+        if (!confirm('Delete this note?')) return;
+        const dateStr = currentDate.toISOString().split('T')[0];
+        DB[currentSubject][dateStr] = DB[currentSubject][dateStr].filter(n => n.id != id);
+        localStorage.setItem('smartNotesDB', JSON.stringify(DB));
+        renderCalendar();
+        renderNotes();
+    }
+
+    function clearForm() {
+        document.getElementById('note-title').value = '';
+        document.getElementById('note-content').value = '';
+        document.getElementById('edit-id').value = '';
+        const btn = document.querySelector('.btn-save');
+        btn.innerText = "Add Note";
+        btn.classList.remove('btn-update');
+    }
+
+    // --- 5. AI LOGIC ---
+    function toggleAI() {
+        const win = document.getElementById('ai-window');
+        win.classList.toggle('open');
+        document.getElementById('settings-modal').classList.remove('active'); // Hide settings if open
+    }
+
+    function openSettings() {
+        document.getElementById('settings-modal').classList.toggle('active');
+    }
+
+    function saveApiKey() {
+        const key = document.getElementById('api-key-input').value;
+        if(key.startsWith('sk-')) {
+            sessionStorage.setItem('openai_key', key);
+            alert("API Key saved for this session!");
+            openSettings(); // Close modal
+        } else {
+            alert("Invalid Key format.");
+        }
+    }
+
+    async function askAI() {
+        const input = document.getElementById('ai-input');
+        const question = input.value.trim();
+        if (!question) return;
+
+        addMsg('user', question);
+        input.value = '';
+        
+        const thinking = addMsg('ai', 'Thinking...');
+        const btn = document.querySelector('.ai-input-area button');
+        btn.disabled = true;
+
+        // Gather context
+        const context = gatherContext(question);
+
+        // Check for API Key
+        const apiKey = sessionStorage.getItem('openai_key');
+
+        if (apiKey) {
+            // --- REAL AI MODE ---
+            try {
+                const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'Authorization': `Bearer ${apiKey}` 
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [
+                            {
+                                role: "system", 
+                                content: `You are a helpful study tutor. 
+                                If the user asks math, show steps clearly. 
+                                If science, explain concepts simply. 
+                                Use the following notes context if relevant: ${context.join('\n')}`
+                            },
+                            { role: "user", content: question }
+                        ]
+                    })
+                });
+                const data = await res.json();
+                if (data.choices && data.choices[0]) {
+                    thinking.innerText = data.choices[0].message.content;
+                } else {
+                    thinking.innerText = "Error: " + JSON.stringify(data.error.message);
+                }
+            } catch (e) {
+                thinking.innerText = "Connection error. Check your API key or internet.";
+            }
+        } else {
+            // --- SIMULATION MODE ---
+            await new Promise(r => setTimeout(r, 1000));
+            if (context.length > 0) {
+                 thinking.innerText = `I found these notes:\n\n"${context[0]}"\n\n(For full reasoning power, please add your API Key in settings ⚙️)`;
+            } else {
+                 thinking.innerText = `I can search your notes, but for full teaching capabilities, please add an OpenAI API key in the settings (⚙️).`;
+            }
+        }
+
+        btn.disabled = false;
+    }
+
+    function addMsg(type, text) {
+        const div = document.createElement('div');
+        div.className = `msg msg-${type}`;
+        div.innerText = text;
+        document.getElementById('chat-area').appendChild(div);
+        document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+        return div; // Return element to update later
+    }
+
+    function gatherContext(question) {
+        let foundNotes = [];
+        const qLower = question.toLowerCase();
+        const subjectKeys = SUBJECTS.map(s => s.toLowerCase());
+
+        // Detect subject in question
+        let targetSubject = null;
+        subjectKeys.forEach(sk => {
+            if (qLower.includes(sk)) {
+                targetSubject = SUBJECTS.find(s => s.toLowerCase() === sk);
+            }
+        });
+
+        // Search Logic
+        if (targetSubject && DB[targetSubject]) {
+            Object.values(DB[targetSubject]).forEach(dayNotes => {
+                dayNotes.forEach(note => foundNotes.push(`[${targetSubject}] ${note.title}: ${note.content}`));
+            });
+        } else {
+            // Search all
+            SUBJECTS.forEach(sub => {
+                if (DB[sub]) {
+                    Object.values(DB[sub]).forEach(dayNotes => {
+                        dayNotes.forEach(note => {
+                            const contentStr = (note.title + note.content).toLowerCase();
+                            let relevant = false;
+                            qLower.split(' ').forEach(k => { if(k.length > 3 && contentStr.includes(k)) relevant = true; });
+                            if (relevant) foundNotes.push(`[${sub}] ${note.title}: ${note.content}`);
+                        });
+                    });
+                }
+            });
+        }
+        return foundNotes.slice(0, 3); // Send top 3 relevant notes as context
+    }
+
+</script>
 </body>
 </html>
