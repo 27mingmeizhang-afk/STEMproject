@@ -1,19 +1,22 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Note Maker & AI Tutor</title>
+    <title>Smart Note Maker</title>
     <style>
         /* --- DESIGN SYSTEM --- */
         :root {
-            --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.6);
+            --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffffff 100%);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
             --accent-pink: #ff85a2;
+            --accent-light: #ffd1dc;
             --accent-deep: #ff5c83;
             --text-main: #5a5a5a;
-            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text-light: #999;
+            --shadow-soft: 0 8px 32px 0 rgba(255, 133, 162, 0.15);
+            --shadow-card: 0 4px 15px rgba(0,0,0,0.05);
             --blur: 12px;
         }
 
@@ -27,15 +30,15 @@
             overflow-x: hidden;
         }
 
-        /* --- GLASSMORPHISM --- */
+        /* --- UTILITIES --- */
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--blur));
             -webkit-backdrop-filter: blur(var(--blur));
-            border-radius: 20px;
+            border-radius: 16px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-soft);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         /* --- LAYOUT --- */
@@ -57,11 +60,9 @@
             font-size: 2.4rem;
             font-weight: 700;
             color: var(--accent-pink);
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
             cursor: pointer;
-            display: inline-block;
+            text-shadow: 1px 1px 0 rgba(255,255,255,1);
         }
-        .logo:hover { transform: scale(1.05); }
 
         /* --- VIEWS --- */
         .view {
@@ -77,17 +78,18 @@
             transform: translateY(0);
         }
 
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-
         /* --- HOME: SUBJECT GRID --- */
+        .section-title { font-size: 1.5rem; color: var(--accent-pink); margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        
         .subjects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .subject-card {
-            padding: 2.5rem 1rem;
+            padding: 2rem;
             text-align: center;
             cursor: pointer;
             position: relative;
@@ -95,137 +97,134 @@
         }
 
         .subject-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(255,133,162,0.25);
-            background: rgba(255,255,255,0.6);
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 15px 35px rgba(255,133,162,0.2);
         }
 
-        .subject-card .icon { font-size: 3rem; margin-bottom: 0.8rem; display: block; transition: transform 0.3s; }
-        .subject-card:hover .icon { transform: scale(1.2); }
-        .subject-card h3 { font-size: 1.2rem; color: #444; letter-spacing: 0.5px; }
+        .subject-card .icon { font-size: 3rem; margin-bottom: 1rem; display: block; transition: transform 0.3s; }
+        .subject-card:hover .icon { transform: scale(1.15); }
+        .subject-card h3 { font-size: 1.1rem; color: #444; }
+
+        /* --- HOME: WIDGETS (To-Do & Saved Notes) --- */
+        .widgets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+        
+        .widget-box { padding: 1.5rem; }
+        .widget-header { font-size: 1.2rem; color: var(--accent-deep); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
+        /* To-Do List Styles */
+        .todo-input-group { display: flex; gap: 10px; margin-bottom: 1rem; }
+        .input-style { flex: 1; padding: 0.7rem 1rem; border: 1px solid #ffd1dc; border-radius: 8px; background: rgba(255,255,255,0.6); outline: none; font-family: inherit; transition: all 0.3s; }
+        .input-style:focus { border-color: var(--accent-pink); background: white; box-shadow: 0 0 0 3px rgba(255,133,162,0.1); }
+        
+        .btn-add { background: var(--accent-pink); color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .btn-add:hover { background: var(--accent-deep); }
+
+        .todo-list { list-style: none; max-height: 300px; overflow-y: auto; }
+        .todo-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.03); animation: slideIn 0.3s; }
+        .todo-item.completed span { text-decoration: line-through; color: #ccc; }
+        .todo-checkbox { margin-right: 10px; accent-color: var(--accent-pink); cursor: pointer; }
+        .delete-btn { margin-left: auto; background: none; border: none; color: #ff6b8a; cursor: pointer; font-size: 1.2rem; opacity: 0; transition: opacity 0.2s; }
+        .todo-item:hover .delete-btn { opacity: 1; }
+
+        /* Saved Notes Styles */
+        .saved-list { max-height: 300px; overflow-y: auto; }
+        .saved-item {
+            background: rgba(255,255,255,0.5);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid var(--accent-pink);
+        }
+        .saved-item:hover { background: white; transform: translateX(5px); }
+        .saved-item h4 { font-size: 0.95rem; margin-bottom: 4px; color: #444; }
+        .saved-item .meta { font-size: 0.8rem; color: #888; }
 
         /* --- DETAIL: CALENDAR & NOTES --- */
-        .detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .back-btn { background: rgba(255,255,255,0.6); border: 1px solid #ffd1dc; padding: 0.6rem 1.2rem; border-radius: 25px; color: var(--accent-pink); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .back-btn:hover { background: white; transform: translateX(-2px); }
 
-        .back-btn {
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--glass-border);
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            color: var(--accent-pink);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .back-btn:hover { background: white; transform: scale(1.05); }
-
-        .subject-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 1.5rem;
-        }
+        .detail-layout { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; }
 
         /* Calendar */
         .calendar-widget { padding: 1.5rem; height: fit-content; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; font-weight: 600; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-weight: 600; color: #555; }
         .cal-nav { cursor: pointer; padding: 5px 10px; border-radius: 50%; transition: background 0.2s; color: var(--accent-pink); user-select: none; }
         .cal-nav:hover { background: rgba(255,133,162,0.1); }
-        
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
-        .cal-day-name { font-size: 0.75rem; color: #999; margin-bottom: 0.5rem; font-weight: bold; }
+
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+        .cal-day-name { font-size: 0.75rem; color: #999; font-weight: bold; }
 
         .cal-day {
-            padding: 0.5rem;
-            font-size: 0.95rem;
+            padding: 8px;
+            font-size: 0.9rem;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.2s;
-            aspect-ratio: 1;
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
             color: #555;
+            position: relative;
         }
 
         .cal-day:hover { background: rgba(255, 133, 162, 0.15); }
-        .cal-day.active { background: var(--accent-pink); color: white; font-weight: bold; box-shadow: 0 4px 10px rgba(255,133,162,0.3); }
-        .cal-day.faded { opacity: 0.3; pointer-events: none; }
-
+        .cal-day.active { background: var(--accent-pink); color: white; font-weight: bold; box-shadow: 0 2px 8px rgba(255,133,162,0.3); }
         .cal-day.has-notes::after {
             content: '';
-            width: 6px; height: 6px;
-            background: var(--accent-pink);
+            width: 5px; height: 5px;
+            background: var(--accent-deep);
             border-radius: 50%;
             position: absolute;
-            bottom: 2px;
-            left: 50%;
+            bottom: 2px; left: 50%;
             transform: translateX(-50%);
         }
         .cal-day.active.has-notes::after { background: white; }
 
         /* Notes Area */
         .notes-area { padding: 1.5rem; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; }
-        .date-display { font-size: 1.3rem; color: var(--accent-pink); border-bottom: 2px solid rgba(255,133,162,0.2); padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-weight: 600; }
+        .date-display { font-size: 1.2rem; color: var(--accent-pink); font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,133,162,0.2); padding-bottom: 0.5rem; }
 
         /* Form */
         .note-form { margin-bottom: 1.5rem; }
         .input-group { margin-bottom: 0.8rem; }
 
-        .input-group input, .input-group textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 12px;
-            background: rgba(255,255,255,0.5);
-            font-family: inherit;
-            outline: none;
-            transition: all 0.3s;
-            font-size: 0.95rem;
-        }
-
-        .input-group input:focus, .input-group textarea:focus { background: white; border-color: var(--accent-pink); box-shadow: 0 0 0 3px rgba(255,133,162,0.1); }
-
-        .btn-save { background: var(--accent-pink); color: white; border: none; padding: 0.8rem; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.2s; }
+        .btn-save { background: var(--accent-pink); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.2s; }
         .btn-save:hover { background: var(--accent-deep); transform: translateY(-1px); }
-        .btn-update { background: #ff5c83; }
+        .btn-update { background: var(--accent-deep); }
 
         /* Note Item */
         .note-item {
-            background: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.5);
             border-left: 4px solid var(--accent-pink);
-            padding: 1rem 1.2rem;
-            margin-bottom: 1rem;
-            border-radius: 0 12px 12px 0;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 0 10px 10px 0;
             position: relative;
             transition: all 0.2s;
-            animation: slideIn 0.3s ease-out;
+            animation: slideIn 0.3s;
         }
-
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-
-        .note-item h4 { marginBottom: '0.3rem'; color: #444; }
-        .note-item p { font-size: 0.9rem; color: #666; white-space: pre-wrap; line-height: 1.5; }
+        .note-item h4 { font-size: 1rem; margin-bottom: 4px; color: #444; }
+        .note-item p { font-size: 0.9rem; color: #666; white-space: pre-wrap; }
+        
         .note-actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; }
         .btn-icon { background: none; border: none; cursor: pointer; font-size: 1rem; opacity: 0.5; transition: all 0.2s; }
-        .btn-icon:hover { opacity: 1; transform: scale(1.1); color: var(--accent-pink); }
+        .btn-icon:hover { opacity: 1; }
+        .btn-star { color: #ccc; }
+        .btn-star.active { color: #FFD700; opacity: 1; } /* Gold for favorites */
 
         /* --- AI ASSISTANT --- */
         .ai-btn {
             position: fixed;
             bottom: 25px;
             right: 25px;
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             background: var(--accent-pink);
             border-radius: 50%;
             color: white;
             border: none;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             cursor: pointer;
             box-shadow: 0 5px 20px rgba(255,133,162,0.4);
             z-index: 1000;
@@ -236,7 +235,7 @@
 
         .ai-window {
             position: fixed;
-            bottom: 100px;
+            bottom: 95px;
             right: 25px;
             width: 380px;
             height: 550px;
@@ -247,39 +246,26 @@
         }
         .ai-window.open { display: flex; animation: slideUp 0.3s ease-out; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .ai-header { background: rgba(255, 133, 162, 0.9); padding: 1rem 1.5rem; color: white; display: flex; justify-content: space-between; align-items: center; }
-        .ai-header h3 { font-size: 1rem; font-weight: 600; }
-        .ai-header-actions { display: flex; gap: 10px; }
-        .ai-header-actions span { cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
-        .ai-header-actions span:hover { opacity: 1; }
-
-        .chat-area { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: rgba(255,255,255,0.2); }
+        .ai-header { background: rgba(255, 133, 162, 0.9); padding: 1rem; color: white; display: flex; justify-content: space-between; align-items: center; }
         
-        .msg { max-width: 85%; padding: 0.8rem 1rem; border-radius: 12px; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); line-height: 1.4; white-space: pre-wrap; }
+        .chat-area { flex: 1; padding: 1rem; overflow-y: auto; background: rgba(255,255,255,0.4); display: flex; flex-direction: column; gap: 0.8rem; }
+        
+        .msg { max-width: 85%; padding: 0.8rem 1rem; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.05); white-space: pre-wrap; }
         .msg-user { background: white; align-self: flex-end; border: 1px solid #eee; }
-        .msg-ai { background: rgba(255, 209, 220, 0.7); align-self: flex-start; border: 1px solid rgba(255,255,255,0.5); }
+        .msg-ai { background: rgba(255, 209, 220, 0.7); align-self: flex-start; }
 
-        .ai-input-area { padding: 1rem; background: rgba(255,255,255,0.4); display: flex; gap: 0.5rem; border-top: 1px solid rgba(255,255,255,0.5); }
-        .ai-input-area input { flex: 1; border: 1px solid #eee; border-radius: 20px; padding: 0.7rem 1rem; outline: none; background: rgba(255,255,255,0.8); font-size: 0.9rem; }
-        .ai-input-area button { background: var(--accent-pink); color: white; border: none; padding: 0 1.2rem; border-radius: 20px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
-        .ai-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .ai-input-area { padding: 1rem; background: rgba(255,255,255,0.5); display: flex; gap: 0.5rem; border-top: 1px solid rgba(255,255,255,0.5); }
+        .ai-input-area input { flex: 1; border: 1px solid #eee; border-radius: 20px; padding: 0.6rem 1rem; outline: none; }
 
-        /* API Key Modal */
-        .settings-modal {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 1.5rem; border-radius: 15px; width: 300px;
-            display: none; flex-direction: column; gap: 1rem; z-index: 1001; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .settings-modal.active { display: flex; }
-        .settings-input { padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; width: 100%; }
-        .btn-save-key { background: var(--accent-pink); color: white; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer; }
+        /* --- ANIMATIONS --- */
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .subject-layout { grid-template-columns: 1fr; }
-            .calendar-widget { margin-bottom: 1rem; }
+            .widgets-grid { grid-template-columns: 1fr; }
+            .detail-layout { grid-template-columns: 1fr; }
             .ai-window { width: 95%; right: 2.5%; height: 60vh; bottom: 80px; }
         }
     </style>
@@ -288,43 +274,69 @@
 
 <div class="app-container">
     <header>
-        <div class="logo" onclick="navigate('home')">✿ Smart Notes</div>
-        <p style="color: #777; margin-top: 5px;">Organize & Learn with AI</p>
+        <div class="logo" onclick="app.navigate('home')">✿ Smart Notes</div>
+        <div style="color: var(--text-light); margin-top:5px; font-size: 0.9rem;">Your Personal Study Companion</div>
     </header>
 
     <!-- VIEW 1: HOME -->
     <div id="view-home" class="view active">
+        <!-- Subjects Section -->
+        <div class="section-title">📚 My Subjects</div>
         <div class="subjects-grid">
-            <div class="glass subject-card" onclick="openSubject('Math')"><span class="icon">📐</span><h3>Math</h3></div>
-            <div class="glass subject-card" onclick="openSubject('English')"><span class="icon">📖</span><h3>English</h3></div>
-            <div class="glass subject-card" onclick="openSubject('Psychology')"><span class="icon">🧠</span><h3>Psychology</h3></div>
-            <div class="glass subject-card" onclick="openSubject('Environmental Science')"><span class="icon">🌱</span><h3>Env. Science</h3></div>
-            <div class="glass subject-card" onclick="openSubject('Social Studies')"><span class="icon">🌍</span><h3>Social Studies</h3></div>
-            <div class="glass subject-card" onclick="openSubject('Self-Study')"><span class="icon">📚</span><h3>Self-Study</h3></div>
-            <div class="glass subject-card" onclick="openSubject('Free Note')"><span class="icon">📝</span><h3>Free Note</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('Math')"><span class="icon">📐</span><h3>Mathematics</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('English')"><span class="icon">📖</span><h3>English</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('Psychology')"><span class="icon">🧠</span><h3>Psychology</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('Environmental Science')"><span class="icon">🌱</span><h3>Env. Science</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('Social Studies')"><span class="icon">🌍</span><h3>Social Studies</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('Self-Study')"><span class="icon">🖋️</span><h3>Self-Study</h3></div>
+            <div class="glass subject-card" onclick="app.openSubject('Free Notes')"><span class="icon">📝</span><h3>Free Notes</h3></div>
+        </div>
+
+        <!-- Widgets Section (To-Do & Saved Notes) -->
+        <div class="widgets-grid">
+            <!-- To-Do Widget -->
+            <div class="glass widget-box">
+                <div class="widget-header">✅ To-Do List</div>
+                <div class="todo-input-group">
+                    <input type="text" id="todo-input" class="input-style" placeholder="Add a new task...">
+                    <button class="btn-add" onclick="app.addTodo()">Add</button>
+                </div>
+                <ul id="todo-list" class="todo-list">
+                    <!-- To-dos injected here -->
+                </ul>
+            </div>
+
+            <!-- Saved Notes Widget -->
+            <div class="glass widget-box">
+                <div class="widget-header">⭐ Saved Notes</div>
+                <div id="saved-list" class="saved-list">
+                    <!-- Saved notes injected here -->
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- VIEW 2: DETAIL -->
     <div id="view-detail" class="view">
         <div class="detail-header">
-            <button class="back-btn" onclick="navigate('home')">← Back</button>
-            <h2 id="page-title" style="color: var(--accent-pink);">Subject Name</h2>
-            <div style="width: 60px;"></div>
+            <button class="back-btn" onclick="app.navigate('home')">← Back</button>
+            <h2 id="detail-title" style="color: var(--accent-pink);">Subject Name</h2>
         </div>
 
-        <div class="subject-layout">
-            <!-- Calendar -->
+        <div class="detail-layout">
+            <!-- Left Column: Calendar -->
             <div class="glass calendar-widget">
                 <div class="calendar-header">
-                    <span class="cal-nav" onclick="changeMonth(-1)">❮</span>
-                    <span id="cal-header">Month 2024</span>
-                    <span class="cal-nav" onclick="changeMonth(1)">❯</span>
+                    <span class="cal-nav" onclick="app.changeMonth(-1)">❮</span>
+                    <span id="cal-month-year">Month 2024</span>
+                    <span class="cal-nav" onclick="app.changeMonth(1)">❯</span>
                 </div>
-                <div class="calendar-grid" id="cal-grid"></div>
+                <div class="calendar-grid" id="cal-grid">
+                    <!-- Days generated here -->
+                </div>
             </div>
 
-            <!-- Notes -->
+            <!-- Right Column: Notes Area -->
             <div class="glass notes-area">
                 <div class="date-display" id="date-display">Select a Date</div>
                 
@@ -332,343 +344,342 @@
                 <div class="note-form">
                     <input type="hidden" id="edit-id">
                     <div class="input-group">
-                        <input type="text" id="note-title" placeholder="Topic Title (e.g., Quadratic Equations)">
+                        <input type="text" id="note-title" class="input-style" placeholder="Note Title">
                     </div>
                     <div class="input-group">
-                        <textarea id="note-content" rows="4" placeholder="Write your notes or questions here..."></textarea>
+                        <textarea id="note-content" class="input-style" rows="3" placeholder="Write your notes here..."></textarea>
                     </div>
-                    <button class="btn-save" onclick="saveNote()">Add Note</button>
+                    <button class="btn-save" onclick="app.saveNote()">Save Note</button>
                 </div>
-
                 <div id="notes-list"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- AI WIDGET -->
-<button class="ai-btn" onclick="toggleAI()">🤖</button>
+<!-- AI ASSISTANT -->
+<button class="ai-btn" onclick="app.toggleAI()">🤖</button>
 <div id="ai-window" class="glass ai-window">
     <div class="ai-header">
-        <h3>AI Study Tutor</h3>
-        <div class="ai-header-actions">
-            <span onclick="openSettings()" title="Settings">⚙️</span>
-            <span onclick="toggleAI()">✕</span>
-        </div>
+        <h3>AI Study Assistant</h3>
+        <span onclick="app.toggleAI()" style="cursor:pointer">✕</span>
     </div>
-    
-    <!-- Settings Modal (Hidden by default) -->
-    <div id="settings-modal" class="settings-modal">
-        <h4>API Configuration</h4>
-        <p style="font-size: 0.8rem; color: #666;">Enter your OpenAI API Key to enable real reasoning. Key is stored only in your browser session.</p>
-        <input type="password" id="api-key-input" class="settings-input" placeholder="sk-...">
-        <button class="btn-save-key" onclick="saveApiKey()">Save Key</button>
-    </div>
-
-    
     <div class="chat-area" id="chat-area">
-        <div class="msg msg-ai">Hello! I'm your AI Tutor. If you add an API Key in settings, I can explain complex concepts, solve math steps, and help you study. Without a key, I can only do basic searches.</div>
+        <div class="msg msg-ai">Hello! I'm your AI Study Buddy. Ask me anything about your subjects!</div>
     </div>
     <div class="ai-input-area">
-        <input type="text" id="ai-input" placeholder="Explain this concept..." onkeypress="if(event.key==='Enter')askAI()">
-        <button onclick="askAI()">Send</button>
+        <input type="text" id="ai-input" placeholder="Ask a question..." onkeypress="if(event.key==='Enter')app.askAI()">
+        <button onclick="app.askAI()">Send</button>
     </div>
 </div>
 
 <script>
-    // --- 1. DATA PERSISTENCE ---
-    // Structure: { "Math": { "2023-10-27": [ {id, title, content}, ... ] } }
-    let DB = JSON.parse(localStorage.getItem('smartNotesDB')) || {};
-    const SUBJECTS = ['Math', 'English', 'Psychology', 'Environmental Science', 'Social Studies', 'Self-Study', 'Free Note'];
-    
-    let currentSubject = '';
-    let currentDate = new Date();
-    let viewDate = new Date();
+    /* ============================================
+       APPLICATION LOGIC
+    ============================================ */
+    const app = {
+        // --- STATE ---
+        data: JSON.parse(localStorage.getItem('smartNotesApp')) || { notes: {}, todos: [] },
+        currentSubject: null,
+        currentDate: new Date(),
+        viewDate: new Date(),
 
-    // --- 2. ROUTER ---
-    function navigate(viewId) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(`view-${viewId}`).classList.add('active');
-        window.scrollTo(0, 0);
-    }
-
-    // --- 3. SUBJECT & CALENDAR LOGIC ---
-    function openSubject(sub) {
-        currentSubject = sub;
-        if (!DB[sub]) DB[sub] = {};
-        
-        document.getElementById('page-title').innerText = sub;
-        currentDate = new Date();
-        viewDate = new Date();
-        
-        renderCalendar();
-        renderNotes();
-        navigate('detail');
-    }
-
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    function renderCalendar() {
-        const year = viewDate.getFullYear();
-        const month = viewDate.getMonth();
-        
-        document.getElementById('cal-header').innerText = `${months[month]} ${year}`;
-        
-        const grid = document.getElementById('cal-grid');
-        grid.innerHTML = '';
-
-        // Day Names
-        ['S','M','T','W','T','F','S'].forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
-
-        // First day logic
-        const firstDayIndex = new Date(year, month, 1).getDay();
-        const daysInMonth = 32 - new Date(year, month, 32).getDate();
-        const selectedStr = currentDate.toISOString().split('T')[0];
-
-        // Padding
-        for (let i=0; i<firstDayIndex; i++) grid.innerHTML += `<div class="cal-day faded"></div>`;
-
-        // Days
-        for (let i=1; i<=daysInMonth; i++) {
-            const tempDate = new Date(year, month, i);
-            const dateStr = tempDate.toISOString().split('T')[0];
+        init: function() {
+            // Ensure structure
+            if(!this.data.notes) this.data.notes = {};
+            if(!this.data.todos) this.data.todos = [];
             
-            const hasNotes = DB[currentSubject] && DB[currentSubject][dateStr] && DB[currentSubject][dateStr].length > 0;
-            const isSelected = dateStr === selectedStr;
+            this.renderTodos();
+            this.renderSavedNotes();
+        },
 
-            grid.innerHTML += `<div class="cal-day ${isSelected?'active':''} ${hasNotes?'has-notes':''}" onclick="selectDate('${dateStr}')">${i}</div>`;
-        }
-    }
+        // --- NAVIGATION ---
+        navigate: function(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            window.scrollTo(0, 0);
+        },
 
-    function changeMonth(delta) {
-        viewDate.setMonth(viewDate.getMonth() + delta);
-        renderCalendar();
-    }
-
-    function selectDate(dateStr) {
-        currentDate = new Date(dateStr + 'T00:00:00');
-        renderCalendar();
-        renderNotes();
-    }
-
-    // --- 4. NOTES CRUD ---
-    function renderNotes() {
-        const dateStr = currentDate.toISOString().split('T')[0];
-        const notes = (DB[currentSubject] && DB[currentSubject][dateStr]) ? DB[currentSubject][dateStr] : [];
+        // --- HOME WIDGETS ---
         
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('date-display').innerText = currentDate.toLocaleDateString('en-US', options);
-
-        const list = document.getElementById('notes-list');
-        
-        if (notes.length === 0) {
-            list.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">No notes for this day.</p>';
-        } else {
-            list.innerHTML = notes.map(n => `
-                <div class="note-item">
-                    <div class="note-actions">
-                        <button class="btn-icon" onclick="editNote('${n.id}', '${n.title.replace(/'/g, "\\'")}', '${n.content.replace(/'/g, "\\'")}')">✎</button>
-                        <button class="btn-icon" onclick="deleteNote('${n.id}')">🗑</button>
-                    </div>
-                    <h4>${n.title}</h4>
-                    <p>${n.content}</p>
-                </div>
+        // To-Do Logic
+        renderTodos: function() {
+            const list = document.getElementById('todo-list');
+            list.innerHTML = this.data.todos.map((t, i) => `
+                <li class="todo-item ${t.done ? 'completed' : ''}">
+                    <input type="checkbox" class="todo-checkbox" ${t.done ? 'checked' : ''} onchange="app.toggleTodo(${i})">
+                    <span>${t.text}</span>
+                    <button class="delete-btn" onclick="app.deleteTodo(${i})">×</button>
+                </li>
             `).join('');
-        }
-        clearForm();
-    }
+        },
 
-    function saveNote() {
-        const title = document.getElementById('note-title').value.trim();
-        const content = document.getElementById('note-content').value.trim();
-        const editId = document.getElementById('edit-id').value;
-        const dateStr = currentDate.toISOString().split('T')[0];
+        addTodo: function() {
+            const input = document.getElementById('todo-input');
+            if(!input.value.trim()) return;
+            this.data.todos.push({ text: input.value, done: false });
+            input.value = '';
+            this.saveData();
+            this.renderTodos();
+        },
 
-        if (!title || !content) return alert('Please enter both title and content.');
+        toggleTodo: function(index) {
+            this.data.todos[index].done = !this.data.todos[index].done;
+            this.saveData();
+            this.renderTodos();
+        },
 
-        if (!DB[currentSubject][dateStr]) DB[currentSubject][dateStr] = [];
+        deleteTodo: function(index) {
+            this.data.todos.splice(index, 1);
+            this.saveData();
+            this.renderTodos();
+        },
 
-        if (editId) {
-            // Update
-            const idx = DB[currentSubject][dateStr].findIndex(n => n.id == editId);
-            if (idx !== -1) {
-                DB[currentSubject][dateStr][idx].title = title;
-                DB[currentSubject][dateStr][idx].content = content;
-            }
-        } else {
-            // Create
-            DB[currentSubject][dateStr].push({
-                id: Date.now(),
-                title,
-                content
-            });
-        }
+        // Saved Notes (Favorites) Logic
+        renderSavedNotes: function() {
+            const list = document.getElementById('saved-list');
+            let favs = [];
 
-        localStorage.setItem('smartNotesDB', JSON.stringify(DB));
-        renderCalendar();
-        renderNotes();
-    }
-
-    function editNote(id, title, content) {
-        document.getElementById('note-title').value = title;
-        document.getElementById('note-content').value = content;
-        document.getElementById('edit-id').value = id;
-        
-        const btn = document.querySelector('.btn-save');
-        btn.innerText = "Update Note";
-        btn.classList.add('btn-update');
-        
-        window.scrollTo(0, 0);
-    }
-
-    function deleteNote(id) {
-        if (!confirm('Delete this note?')) return;
-        const dateStr = currentDate.toISOString().split('T')[0];
-        DB[currentSubject][dateStr] = DB[currentSubject][dateStr].filter(n => n.id != id);
-        localStorage.setItem('smartNotesDB', JSON.stringify(DB));
-        renderCalendar();
-        renderNotes();
-    }
-
-    function clearForm() {
-        document.getElementById('note-title').value = '';
-        document.getElementById('note-content').value = '';
-        document.getElementById('edit-id').value = '';
-        const btn = document.querySelector('.btn-save');
-        btn.innerText = "Add Note";
-        btn.classList.remove('btn-update');
-    }
-
-    // --- 5. AI LOGIC ---
-    function toggleAI() {
-        const win = document.getElementById('ai-window');
-        win.classList.toggle('open');
-        document.getElementById('settings-modal').classList.remove('active'); // Hide settings if open
-    }
-
-    function openSettings() {
-        document.getElementById('settings-modal').classList.toggle('active');
-    }
-
-    function saveApiKey() {
-        const key = document.getElementById('api-key-input').value;
-        if(key.startsWith('sk-')) {
-            sessionStorage.setItem('openai_key', key);
-            alert("API Key saved for this session!");
-            openSettings(); // Close modal
-        } else {
-            alert("Invalid Key format.");
-        }
-    }
-
-    async function askAI() {
-        const input = document.getElementById('ai-input');
-        const question = input.value.trim();
-        if (!question) return;
-
-        addMsg('user', question);
-        input.value = '';
-        
-        const thinking = addMsg('ai', 'Thinking...');
-        const btn = document.querySelector('.ai-input-area button');
-        btn.disabled = true;
-
-        // Gather context
-        const context = gatherContext(question);
-
-        // Check for API Key
-        const apiKey = sessionStorage.getItem('openai_key');
-
-        if (apiKey) {
-            // --- REAL AI MODE ---
-            try {
-                const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json', 
-                        'Authorization': `Bearer ${apiKey}` 
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
-                        messages: [
-                            {
-                                role: "system", 
-                                content: `You are a helpful study tutor. 
-                                If the user asks math, show steps clearly. 
-                                If science, explain concepts simply. 
-                                Use the following notes context if relevant: ${context.join('\n')}`
-                            },
-                            { role: "user", content: question }
-                        ]
-                    })
-                });
-                const data = await res.json();
-                if (data.choices && data.choices[0]) {
-                    thinking.innerText = data.choices[0].message.content;
-                } else {
-                    thinking.innerText = "Error: " + JSON.stringify(data.error.message);
-                }
-            } catch (e) {
-                thinking.innerText = "Connection error. Check your API key or internet.";
-            }
-        } else {
-            // --- SIMULATION MODE ---
-            await new Promise(r => setTimeout(r, 1000));
-            if (context.length > 0) {
-                 thinking.innerText = `I found these notes:\n\n"${context[0]}"\n\n(For full reasoning power, please add your API Key in settings ⚙️)`;
-            } else {
-                 thinking.innerText = `I can search your notes, but for full teaching capabilities, please add an OpenAI API key in the settings (⚙️).`;
-            }
-        }
-
-        btn.disabled = false;
-    }
-
-    function addMsg(type, text) {
-        const div = document.createElement('div');
-        div.className = `msg msg-${type}`;
-        div.innerText = text;
-        document.getElementById('chat-area').appendChild(div);
-        document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
-        return div; // Return element to update later
-    }
-
-    function gatherContext(question) {
-        let foundNotes = [];
-        const qLower = question.toLowerCase();
-        const subjectKeys = SUBJECTS.map(s => s.toLowerCase());
-
-        // Detect subject in question
-        let targetSubject = null;
-        subjectKeys.forEach(sk => {
-            if (qLower.includes(sk)) {
-                targetSubject = SUBJECTS.find(s => s.toLowerCase() === sk);
-            }
-        });
-
-        // Search Logic
-        if (targetSubject && DB[targetSubject]) {
-            Object.values(DB[targetSubject]).forEach(dayNotes => {
-                dayNotes.forEach(note => foundNotes.push(`[${targetSubject}] ${note.title}: ${note.content}`));
-            });
-        } else {
-            // Search all
-            SUBJECTS.forEach(sub => {
-                if (DB[sub]) {
-                    Object.values(DB[sub]).forEach(dayNotes => {
-                        dayNotes.forEach(note => {
-                            const contentStr = (note.title + note.content).toLowerCase();
-                            let relevant = false;
-                            qLower.split(' ').forEach(k => { if(k.length > 3 && contentStr.includes(k)) relevant = true; });
-                            if (relevant) foundNotes.push(`[${sub}] ${note.title}: ${note.content}`);
-                        });
+            // Iterate through all subjects and dates to find starred notes
+            for (let subject in this.data.notes) {
+                for (let date in this.data.notes[subject]) {
+                    this.data.notes[subject][date].forEach(n => {
+                        if(n.starred) favs.push({ ...n, subject, date });
                     });
                 }
-            });
-        }
-        return foundNotes.slice(0, 3); // Send top 3 relevant notes as context
-    }
+            }
 
+            if (favs.length === 0) {
+                list.innerHTML = '<div style="color:#ccc; text-align:center; padding: 20px;">No saved notes yet.<br>Click the ★ on a note to save it.</div>';
+            } else {
+                list.innerHTML = favs.map(f => `
+                    <div class="saved-item" onclick="app.goToNote('${f.subject}', '${f.date}')">
+                        <h4>${f.title}</h4>
+                        <div class="meta">${f.subject} • ${f.date}</div>
+                    </div>
+                `).join('');
+            }
+        },
+
+        goToNote: function(subject, date) {
+            this.currentSubject = subject;
+            this.currentDate = new Date(date + 'T00:00:00');
+            this.viewDate = new Date(date + 'T00:00:00');
+            this.openSubject(subject); // This will re-render calendar and notes
+        },
+
+        // --- SUBJECT & CALENDAR LOGIC ---
+        openSubject: function(subjectName) {
+            this.currentSubject = subjectName;
+            document.getElementById('detail-title').innerText = subjectName;
+            
+            if (!this.data.notes[subjectName]) this.data.notes[subjectName] = {};
+            
+            this.currentDate = new Date();
+            this.viewDate = new Date();
+            
+            this.renderCalendar();
+            this.renderNotes();
+            this.navigate('detail');
+        },
+
+        renderCalendar: function() {
+            const year = this.viewDate.getFullYear();
+            const month = this.viewDate.getMonth();
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('cal-month-year').innerText = `${monthNames[month]} ${year}`;
+            
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
+
+            // Day Names
+            ['S','M','T','W','T','F','S'].forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
+
+            // First day logic
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const daysInMonth = 32 - new Date(year, month, 32).getDate();
+            const selectedStr = this.currentDate.toISOString().split('T')[0];
+
+            // Padding
+            for (let i=0; i<firstDayIndex; i++) grid.innerHTML += `<div class="cal-day"></div>`;
+
+            // Days
+            for (let i=1; i<=daysInMonth; i++) {
+                const tempDate = new Date(year, month, i);
+                const dateStr = tempDate.toISOString().split('T')[0];
+                
+                const hasNotes = this.data.notes[this.currentSubject][dateStr] && this.data.notes[this.currentSubject][dateStr].length > 0;
+                const isSelected = dateStr === selectedStr;
+
+                grid.innerHTML += `<div class="cal-day ${isSelected?'active':''} ${hasNotes?'has-notes':''}" onclick="app.selectDate('${dateStr}')">${i}</div>`;
+            }
+        },
+
+        changeMonth: function(delta) {
+            this.viewDate.setMonth(this.viewDate.getMonth() + delta);
+            this.renderCalendar();
+        },
+
+        selectDate: function(dateStr) {
+            this.currentDate = new Date(dateStr + 'T00:00:00');
+            this.renderCalendar();
+            this.renderNotes();
+        },
+
+        // --- NOTES LOGIC ---
+        renderNotes: function() {
+            const dateStr = this.currentDate.toISOString().split('T')[0];
+            const notes = this.data.notes[this.currentSubject][dateStr] || [];
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date-display').innerText = this.currentDate.toLocaleDateString('en-US', options);
+
+            const list = document.getElementById('notes-list');
+            
+            if (notes.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#ccc; margin-top:20px;">No notes for this day.</div>';
+            } else {
+                list.innerHTML = notes.map(n => `
+                    <div class="note-item">
+                        <div class="note-actions">
+                            <button class="btn-icon btn-star ${n.starred ? 'active' : ''}" onclick="app.toggleStar('${dateStr}', '${n.id}')">★</button>
+                            <button class="btn-icon" onclick="app.editNote('${dateStr}', '${n.id}', '${n.title.replace(/'/g, "\\'")}', '${n.content.replace(/'/g, "\\'")}')">✎</button>
+                            <button class="btn-icon" onclick="app.deleteNote('${dateStr}', '${n.id}')">🗑</button>
+                        </div>
+                        <h4>${n.title}</h4>
+                        <p>${n.content}</p>
+                    </div>
+                `).join('');
+            }
+            this.clearForm();
+        },
+
+        saveNote: function() {
+            const title = document.getElementById('note-title').value.trim();
+            const content = document.getElementById('note-content').value.trim();
+            const editId = document.getElementById('edit-id').value;
+            const dateStr = this.currentDate.toISOString().split('T')[0];
+
+            if (!title || !content) return alert('Please enter title and content.');
+
+            if (!this.data.notes[this.currentSubject][dateStr]) this.data.notes[this.currentSubject][dateStr] = [];
+
+            if (editId) {
+                // Update Logic
+                const idx = this.data.notes[this.currentSubject][dateStr].findIndex(n => n.id == editId);
+                if (idx !== -1) {
+                    const isStarred = this.data.notes[this.currentSubject][dateStr][idx].starred;
+                    this.data.notes[this.currentSubject][dateStr][idx] = { id: editId, title, content, starred: isStarred };
+                }
+            } else {
+                // Create Logic
+                this.data.notes[this.currentSubject][dateStr].push({
+                    id: Date.now(),
+                    title: title,
+                    content: content,
+                    starred: false
+                });
+            }
+
+            this.saveData();
+            this.renderCalendar();
+            this.renderNotes();
+            this.renderSavedNotes(); // Update home widget
+        },
+
+        editNote: function(date, id, title, content) {
+            document.getElementById('note-title').value = title;
+            document.getElementById('note-content').value = content;
+            document.getElementById('edit-id').value = id;
+            
+            const btn = document.querySelector('.btn-save');
+            btn.innerText = "Update Note";
+            btn.classList.add('btn-update');
+        },
+
+        deleteNote: function(date, id) {
+            if (!confirm('Delete this note?')) return;
+            this.data.notes[this.currentSubject][date] = this.data.notes[this.currentSubject][date].filter(n => n.id != id);
+            
+            // Clean up empty dates
+            if (this.data.notes[this.currentSubject][date].length === 0) {
+                delete this.data.notes[this.currentSubject][date];
+            }
+
+            this.saveData();
+            this.renderCalendar();
+            this.renderNotes();
+            this.renderSavedNotes();
+        },
+
+        toggleStar: function(date, id) {
+            const idx = this.data.notes[this.currentSubject][date].findIndex(n => n.id == id);
+            if(idx !== -1) {
+                this.data.notes[this.currentSubject][date][idx].starred = !this.data.notes[this.currentSubject][date][idx].starred;
+            }
+            this.saveData();
+            this.renderNotes();
+            this.renderSavedNotes();
+        },
+
+        clearForm: function() {
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+            document.getElementById('edit-id').value = '';
+            const btn = document.querySelector('.btn-save');
+            btn.innerText = "Save Note";
+            btn.classList.remove('btn-update');
+        },
+
+        saveData: function() {
+            localStorage.setItem('smartNotesApp', JSON.stringify(this.data));
+        },
+
+        // --- AI ASSISTANT LOGIC ---
+        toggleAI: function() {
+            document.getElementById('ai-window').classList.toggle('open');
+        },
+
+        askAI: function() {
+            const input = document.getElementById('ai-input');
+            const question = input.value.trim();
+            if (!question) return;
+
+            this.addMsg('user', question);
+            input.value = '';
+
+            // Simulated Intelligence
+            setTimeout(() => {
+                let response = "I am currently a demo simulation. In a full version, I would analyze your notes and provide smart insights!";
+                
+                const q = question.toLowerCase();
+                if (q.includes("slope") || q.includes("math")) {
+                    response = "📐 **Math Explanation:**\nTo find the slope of a line:\n1. Identify two points.\n2. Use the formula m = (y2 - y1) / (x2 - x1).";
+                } 
+                else if (q.includes("photosynthesis")) {
+                    response = "🌱 **Science Concept:**\nPhotosynthesis converts light energy into chemical energy. The formula is:\n6CO2 + 6H2O + Light → C6H12O6 + 6O2.";
+                }
+                else if (q.includes("hello")) {
+                    response = "Hi there! 👋 How can I help you study today?";
+                }
+
+                this.addMsg('ai', response);
+            }, 800);
+        },
+
+        addMsg: function(type, text) {
+            const area = document.getElementById('chat-area');
+            const div = document.createElement('div');
+            div.className = `msg msg-${type}`;
+            div.innerText = text;
+            area.appendChild(div);
+            area.scrollTop = area.scrollHeight;
+        }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => app.init());
 </script>
 </body>
 </html>
