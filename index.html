@@ -1,9 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Note Maker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- DESIGN SYSTEM --- */
         :root {
@@ -11,19 +12,17 @@
             --glass-bg: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.8);
             --accent-pink: #ff85a2;
-            --accent-light: #ffd1dc;
             --accent-deep: #ff5c83;
             --text-main: #5a5a5a;
             --text-light: #999;
             --shadow-soft: 0 8px 32px 0 rgba(255, 133, 162, 0.15);
-            --shadow-card: 0 4px 15px rgba(0,0,0,0.05);
             --blur: 12px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--bg-gradient);
             color: var(--text-main);
             min-height: 100vh;
@@ -35,7 +34,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(var(--blur));
             -webkit-backdrop-filter: blur(var(--blur));
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-soft);
             transition: all 0.3s ease;
@@ -43,7 +42,7 @@
 
         /* --- LAYOUT --- */
         .app-container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
             position: relative;
@@ -79,70 +78,68 @@
         }
 
         /* --- HOME: SUBJECT GRID --- */
-        .section-title { font-size: 1.5rem; color: var(--accent-pink); margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-        
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
+        .section-title { font-size: 1.5rem; color: var(--accent-pink); margin-bottom: 1.5rem; font-weight: 600; }
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
 
         .subject-card {
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             cursor: pointer;
             position: relative;
-            overflow: hidden;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .subject-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.8);
-            box-shadow: 0 15px 35px rgba(255,133,162,0.2);
-        }
-
-        .subject-card .icon { font-size: 3rem; margin-bottom: 1rem; display: block; transition: transform 0.3s; }
+        .subject-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.8); }
+        .subject-card .icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; transition: transform 0.3s; }
         .subject-card:hover .icon { transform: scale(1.15); }
-        .subject-card h3 { font-size: 1.1rem; color: #444; }
+        .subject-card h3 { font-size: 1rem; color: #444; }
 
-        /* --- HOME: WIDGETS (To-Do & Saved Notes) --- */
-        .widgets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
-        
+        /* --- HOME: BOTTOM WIDGETS (TO-DO & SAVED) --- */
+        .widgets-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
         .widget-box { padding: 1.5rem; }
         .widget-header { font-size: 1.2rem; color: var(--accent-deep); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
 
         /* To-Do List Styles */
         .todo-input-group { display: flex; gap: 10px; margin-bottom: 1rem; }
-        .input-style { flex: 1; padding: 0.7rem 1rem; border: 1px solid #ffd1dc; border-radius: 8px; background: rgba(255,255,255,0.6); outline: none; font-family: inherit; transition: all 0.3s; }
-        .input-style:focus { border-color: var(--accent-pink); background: white; box-shadow: 0 0 0 3px rgba(255,133,162,0.1); }
+        .input-style { flex: 1; padding: 0.6rem 1rem; border: 1px solid #ffd1dc; border-radius: 8px; background: rgba(255,255,255,0.6); outline: none; font-family: inherit; width: 100%; }
+        .input-style:focus { border-color: var(--accent-pink); background: white; }
         
-        .btn-add { background: var(--accent-pink); color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
-        .btn-add:hover { background: var(--accent-deep); }
+        .btn-small { background: var(--accent-pink); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+        .btn-small:hover { background: var(--accent-deep); }
 
         .todo-list { list-style: none; max-height: 300px; overflow-y: auto; }
-        .todo-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.03); animation: slideIn 0.3s; }
+        .todo-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.03); animation: slideIn 0.3s; }
         .todo-item.completed span { text-decoration: line-through; color: #ccc; }
-        .todo-checkbox { margin-right: 10px; accent-color: var(--accent-pink); cursor: pointer; }
-        .delete-btn { margin-left: auto; background: none; border: none; color: #ff6b8a; cursor: pointer; font-size: 1.2rem; opacity: 0; transition: opacity 0.2s; }
-        .todo-item:hover .delete-btn { opacity: 1; }
+        .todo-checkbox { margin-right: 10px; accent-color: var(--accent-pink); cursor: pointer; width: 18px; height: 18px; }
+        .delete-task { margin-left: auto; color: #ff6b8a; cursor: pointer; font-size: 1.1rem; opacity: 0; transition: opacity 0.2s; }
+        .todo-item:hover .delete-task { opacity: 1; }
 
-        /* Saved Notes Styles */
-        .saved-list { max-height: 300px; overflow-y: auto; }
+        /* Saved Notes List */
+        .saved-list { display: flex; flex-direction: column; gap: 0.8rem; max-height: 300px; overflow-y: auto; }
         .saved-item {
             background: rgba(255,255,255,0.5);
             padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-pink);
             cursor: pointer;
             transition: all 0.2s;
-            border-left: 4px solid var(--accent-pink);
         }
         .saved-item:hover { background: white; transform: translateX(5px); }
         .saved-item h4 { font-size: 0.95rem; margin-bottom: 4px; color: #444; }
         .saved-item .meta { font-size: 0.8rem; color: #888; }
+        .saved-item p { font-size: 0.85rem; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* --- DETAIL: CALENDAR & NOTES --- */
+        /* --- SUBJECT DETAIL PAGE --- */
         .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .back-btn { background: rgba(255,255,255,0.6); border: 1px solid #ffd1dc; padding: 0.6rem 1.2rem; border-radius: 25px; color: var(--accent-pink); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
         .back-btn:hover { background: white; transform: translateX(-2px); }
@@ -152,66 +149,36 @@
         /* Calendar */
         .calendar-widget { padding: 1.5rem; height: fit-content; }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-weight: 600; color: #555; }
-        .cal-nav { cursor: pointer; padding: 5px 10px; border-radius: 50%; transition: background 0.2s; color: var(--accent-pink); user-select: none; }
+        .cal-nav { cursor: pointer; padding: 5px 10px; border-radius: 50%; transition: background 0.2s; color: var(--accent-pink); user-select: none; font-size: 1.2rem; }
         .cal-nav:hover { background: rgba(255,133,162,0.1); }
-
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .cal-day-name { font-size: 0.75rem; color: #999; font-weight: bold; }
-
-        .cal-day {
-            padding: 8px;
-            font-size: 0.9rem;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #555;
-            position: relative;
-        }
-
+        .cal-day-name { font-size: 0.75rem; color: #999; font-weight: bold; margin-bottom: 5px; }
+        .cal-day { padding: 8px; font-size: 0.9rem; border-radius: 50%; cursor: pointer; transition: all 0.2s; color: #555; position: relative; }
         .cal-day:hover { background: rgba(255, 133, 162, 0.15); }
-        .cal-day.active { background: var(--accent-pink); color: white; font-weight: bold; box-shadow: 0 2px 8px rgba(255,133,162,0.3); }
-        .cal-day.has-notes::after {
-            content: '';
-            width: 5px; height: 5px;
-            background: var(--accent-deep);
-            border-radius: 50%;
-            position: absolute;
-            bottom: 2px; left: 50%;
-            transform: translateX(-50%);
-        }
+        .cal-day.active { background: var(--accent-pink); color: white; font-weight: bold; }
+        .cal-day.has-notes::after { content: ''; width: 5px; height: 5px; background: var(--accent-deep); border-radius: 50%; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); }
         .cal-day.active.has-notes::after { background: white; }
 
         /* Notes Area */
         .notes-area { padding: 1.5rem; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; }
-        .date-display { font-size: 1.2rem; color: var(--accent-pink); font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,133,162,0.2); padding-bottom: 0.5rem; }
-
-        /* Form */
+        .date-display { font-size: 1.2rem; color: var(--accent-pink); font-weight: 600; margin-bottom: 1rem; border-bottom: 2px solid rgba(255,133,162,0.2); padding-bottom: 0.5rem; }
+        
+        /* Note Form */
         .note-form { margin-bottom: 1.5rem; }
-        .input-group { margin-bottom: 0.8rem; }
-
-        .btn-save { background: var(--accent-pink); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.2s; }
+        .note-form textarea { min-height: 100px; resize: vertical; margin-bottom: 0.8rem; }
+        .btn-save { width: 100%; padding: 0.8rem; background: var(--accent-pink); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 1rem; }
         .btn-save:hover { background: var(--accent-deep); transform: translateY(-1px); }
         .btn-update { background: var(--accent-deep); }
 
         /* Note Item */
-        .note-item {
-            background: rgba(255,255,255,0.5);
-            border-left: 4px solid var(--accent-pink);
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 0 10px 10px 0;
-            position: relative;
-            transition: all 0.2s;
-            animation: slideIn 0.3s;
-        }
+        .note-item { background: rgba(255,255,255,0.5); border-left: 4px solid var(--accent-pink); padding: 15px; margin-bottom: 10px; border-radius: 0 10px 10px 0; position: relative; transition: all 0.2s; animation: slideIn 0.3s; }
         .note-item h4 { font-size: 1rem; margin-bottom: 4px; color: #444; }
         .note-item p { font-size: 0.9rem; color: #666; white-space: pre-wrap; }
-        
         .note-actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; }
-        .btn-icon { background: none; border: none; cursor: pointer; font-size: 1rem; opacity: 0.5; transition: all 0.2s; }
+        .btn-icon { background: none; border: none; cursor: pointer; font-size: 1.1rem; opacity: 0.5; transition: all 0.2s; }
         .btn-icon:hover { opacity: 1; }
         .btn-star { color: #ccc; }
-        .btn-star.active { color: #FFD700; opacity: 1; } /* Gold for favorites */
+        .btn-star.active { color: #FFD700; opacity: 1; text-shadow: 0 0 2px rgba(0,0,0,0.2); }
 
         /* --- AI ASSISTANT --- */
         .ai-btn {
@@ -220,7 +187,7 @@
             right: 25px;
             width: 60px;
             height: 60px;
-            background: var(--accent-pink);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             border-radius: 50%;
             color: white;
             border: none;
@@ -246,25 +213,25 @@
         }
         .ai-window.open { display: flex; animation: slideUp 0.3s ease-out; }
 
-        .ai-header { background: rgba(255, 133, 162, 0.9); padding: 1rem; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .ai-header { background: var(--accent-pink); padding: 1rem; color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 20px 20px 0 0; }
         
-        .chat-area { flex: 1; padding: 1rem; overflow-y: auto; background: rgba(255,255,255,0.4); display: flex; flex-direction: column; gap: 0.8rem; }
+        .chat-area { flex: 1; padding: 1rem; overflow-y: auto; background: rgba(255,250,250,0.5); display: flex; flex-direction: column; gap: 0.8rem; }
         
-        .msg { max-width: 85%; padding: 0.8rem 1rem; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.05); white-space: pre-wrap; }
-        .msg-user { background: white; align-self: flex-end; border: 1px solid #eee; }
-        .msg-ai { background: rgba(255, 209, 220, 0.7); align-self: flex-start; }
+        .msg { max-width: 85%; padding: 0.9rem 1.1rem; border-radius: 15px; font-size: 0.9rem; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.05); white-space: pre-wrap; }
+        .msg-user { background: white; align-self: flex-end; border: 1px solid #eee; border-bottom-right-radius: 2px; }
+        .msg-ai { background: #fff0f5; align-self: flex-start; border: 1px solid #ffd1dc; border-bottom-left-radius: 2px; }
 
-        .ai-input-area { padding: 1rem; background: rgba(255,255,255,0.5); display: flex; gap: 0.5rem; border-top: 1px solid rgba(255,255,255,0.5); }
-        .ai-input-area input { flex: 1; border: 1px solid #eee; border-radius: 20px; padding: 0.6rem 1rem; outline: none; }
+        .ai-input-area { padding: 1rem; background: rgba(255,255,255,0.8); display: flex; gap: 0.5rem; border-top: 1px solid rgba(255,255,255,0.5); border-radius: 0 0 20px 20px; }
+        .ai-input-area input { flex: 1; border: 1px solid #ffd1dc; border-radius: 20px; padding: 0.6rem 1rem; outline: none; }
 
-        /* --- ANIMATIONS --- */
+        /* Animations */
         @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .widgets-grid { grid-template-columns: 1fr; }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .widgets-container { grid-template-columns: 1fr; }
             .detail-layout { grid-template-columns: 1fr; }
             .ai-window { width: 95%; right: 2.5%; height: 60vh; bottom: 80px; }
         }
@@ -274,32 +241,26 @@
 
 <div class="app-container">
     <header>
-        <div class="logo" onclick="app.navigate('home')">✿ Smart Notes</div>
+        <div class="logo" onclick="App.navigate('home')">✿ Smart Notes</div>
         <div style="color: var(--text-light); margin-top:5px; font-size: 0.9rem;">Your Personal Study Companion</div>
     </header>
 
-    <!-- VIEW 1: HOME -->
+    <!-- HOME VIEW -->
     <div id="view-home" class="view active">
-        <!-- Subjects Section -->
+        <!-- Top: Subjects -->
         <div class="section-title">📚 My Subjects</div>
-        <div class="subjects-grid">
-            <div class="glass subject-card" onclick="app.openSubject('Math')"><span class="icon">📐</span><h3>Mathematics</h3></div>
-            <div class="glass subject-card" onclick="app.openSubject('English')"><span class="icon">📖</span><h3>English</h3></div>
-            <div class="glass subject-card" onclick="app.openSubject('Psychology')"><span class="icon">🧠</span><h3>Psychology</h3></div>
-            <div class="glass subject-card" onclick="app.openSubject('Environmental Science')"><span class="icon">🌱</span><h3>Env. Science</h3></div>
-            <div class="glass subject-card" onclick="app.openSubject('Social Studies')"><span class="icon">🌍</span><h3>Social Studies</h3></div>
-            <div class="glass subject-card" onclick="app.openSubject('Self-Study')"><span class="icon">🖋️</span><h3>Self-Study</h3></div>
-            <div class="glass subject-card" onclick="app.openSubject('Free Notes')"><span class="icon">📝</span><h3>Free Notes</h3></div>
+        <div id="subjects-grid" class="subjects-grid">
+            <!-- Populated by JS -->
         </div>
 
-        <!-- Widgets Section (To-Do & Saved Notes) -->
-        <div class="widgets-grid">
+        <!-- Bottom: Widgets -->
+        <div class="widgets-container">
             <!-- To-Do Widget -->
             <div class="glass widget-box">
                 <div class="widget-header">✅ To-Do List</div>
                 <div class="todo-input-group">
                     <input type="text" id="todo-input" class="input-style" placeholder="Add a new task...">
-                    <button class="btn-add" onclick="app.addTodo()">Add</button>
+                    <button class="btn-small" onclick="App.addTodo()">Add</button>
                 </div>
                 <ul id="todo-list" class="todo-list">
                     <!-- To-dos injected here -->
@@ -316,10 +277,10 @@
         </div>
     </div>
 
-    <!-- VIEW 2: DETAIL -->
+    <!-- SUBJECT DETAIL VIEW -->
     <div id="view-detail" class="view">
         <div class="detail-header">
-            <button class="back-btn" onclick="app.navigate('home')">← Back</button>
+            <button class="back-btn" onclick="App.navigate('home')">← Back</button>
             <h2 id="detail-title" style="color: var(--accent-pink);">Subject Name</h2>
         </div>
 
@@ -327,29 +288,23 @@
             <!-- Left Column: Calendar -->
             <div class="glass calendar-widget">
                 <div class="calendar-header">
-                    <span class="cal-nav" onclick="app.changeMonth(-1)">❮</span>
+                    <span class="cal-nav" onclick="App.changeMonth(-1)">❮</span>
                     <span id="cal-month-year">Month 2024</span>
-                    <span class="cal-nav" onclick="app.changeMonth(1)">❯</span>
+                    <span class="cal-nav" onclick="App.changeMonth(1)">❯</span>
                 </div>
-                <div class="calendar-grid" id="cal-grid">
-                    <!-- Days generated here -->
-                </div>
+                <div class="calendar-grid" id="cal-grid"></div>
             </div>
 
             <!-- Right Column: Notes Area -->
             <div class="glass notes-area">
                 <div class="date-display" id="date-display">Select a Date</div>
                 
-                <!-- Form -->
+                <!-- Add Note Form -->
                 <div class="note-form">
-                    <input type="hidden" id="edit-id">
-                    <div class="input-group">
-                        <input type="text" id="note-title" class="input-style" placeholder="Note Title">
-                    </div>
-                    <div class="input-group">
-                        <textarea id="note-content" class="input-style" rows="3" placeholder="Write your notes here..."></textarea>
-                    </div>
-                    <button class="btn-save" onclick="app.saveNote()">Save Note</button>
+                    <input type="text" id="note-title" class="input-style" placeholder="Note Title" style="margin-bottom: 10px;">
+                    <textarea id="note-content" class="input-style" placeholder="Write your notes here..."></textarea>
+                    <input type="hidden" id="edit-note-id">
+                    <button class="btn-save" onclick="App.saveNote()">Save Note</button>
                 </div>
                 <div id="notes-list"></div>
             </div>
@@ -358,328 +313,368 @@
 </div>
 
 <!-- AI ASSISTANT -->
-<button class="ai-btn" onclick="app.toggleAI()">🤖</button>
+<button class="ai-btn" onclick="App.toggleAI()">🤖</button>
 <div id="ai-window" class="glass ai-window">
     <div class="ai-header">
-        <h3>AI Study Assistant</h3>
-        <span onclick="app.toggleAI()" style="cursor:pointer">✕</span>
+        <h3>AI Study Tutor</h3>
+        <span onclick="App.toggleAI()" style="cursor:pointer">✕</span>
     </div>
     <div class="chat-area" id="chat-area">
-        <div class="msg msg-ai">Hello! I'm your AI Study Buddy. Ask me anything about your subjects!</div>
+        <div class="msg msg-ai">Hello! I'm your AI Study Buddy. I can solve basic math (e.g., "1+1") or help you study. Ask me anything!</div>
     </div>
     <div class="ai-input-area">
-        <input type="text" id="ai-input" placeholder="Ask a question..." onkeypress="if(event.key==='Enter')app.askAI()">
-        <button onclick="app.askAI()">Send</button>
+        <input type="text" id="ai-input" placeholder="Ask a question..." onkeypress="if(event.key==='Enter')App.askAI()">
+        <button onclick="App.askAI()">Send</button>
     </div>
 </div>
 
 <script>
-    /* ============================================
-       APPLICATION LOGIC
-    ============================================ */
-    const app = {
-        // --- STATE ---
-        data: JSON.parse(localStorage.getItem('smartNotesApp')) || { notes: {}, todos: [] },
-        currentSubject: null,
-        currentDate: new Date(),
-        viewDate: new Date(),
+/* ============================================
+   APPLICATION LOGIC
+============================================ */
+const App = {
+    data: {
+        subjects: [
+            { id: 'math', name: 'Mathematics', icon: '📐' },
+            { id: 'eng', name: 'English', icon: '📖' },
+            { id: 'psy', name: 'Psychology', icon: '🧠' },
+            { id: 'env', name: 'Environmental Science', icon: '🌱' },
+            { id: 'soc', name: 'Social Studies', icon: '🌍' },
+            { id: 'self', name: 'Self-Study', icon: '🖋️' },
+            { id: 'free', name: 'Free Notes', icon: '📝' }
+        ],
+        notes: {}, // Structure: { subjectId: { 'YYYY-MM-DD': [ {id, title, content, saved} ] } }
+        todos: []  // Global To-Dos
+    },
+    
+    currentSubject: null,
+    currentDate: new Date(),
+    viewDate: new Date(),
 
-        init: function() {
-            // Ensure structure
-            if(!this.data.notes) this.data.notes = {};
-            if(!this.data.todos) this.data.todos = [];
-            
-            this.renderTodos();
-            this.renderSavedNotes();
-        },
+    init: function() {
+        const stored = localStorage.getItem('smartNotesAppData');
+        if (stored) {
+            this.data = JSON.parse(stored);
+        }
+        this.renderHome();
+    },
 
-        // --- NAVIGATION ---
-        navigate: function(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(`view-${viewId}`).classList.add('active');
-            window.scrollTo(0, 0);
-        },
+    save: function() {
+        localStorage.setItem('smartNotesAppData', JSON.stringify(this.data));
+    },
 
-        // --- HOME WIDGETS ---
+    navigate: function(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(`view-${viewId}`).classList.add('active');
+        window.scrollTo(0, 0);
+    },
+
+    // --- HOME LOGIC ---
+    renderHome: function() {
+        // Render Subjects
+        const grid = document.getElementById('subjects-grid');
+        let subjectsHtml = '';
         
-        // To-Do Logic
-        renderTodos: function() {
-            const list = document.getElementById('todo-list');
-            list.innerHTML = this.data.todos.map((t, i) => `
-                <li class="todo-item ${t.done ? 'completed' : ''}">
-                    <input type="checkbox" class="todo-checkbox" ${t.done ? 'checked' : ''} onchange="app.toggleTodo(${i})">
-                    <span>${t.text}</span>
-                    <button class="delete-btn" onclick="app.deleteTodo(${i})">×</button>
-                </li>
-            `).join('');
-        },
+        this.data.subjects.forEach(s => {
+            subjectsHtml += `
+                <div class="glass subject-card" onclick="App.openSubject('${s.id}')">
+                    <span class="icon">${s.icon}</span>
+                    <h3>${s.name}</h3>
+                </div>
+            `;
+        });
+        grid.innerHTML = subjectsHtml;
 
-        addTodo: function() {
-            const input = document.getElementById('todo-input');
-            if(!input.value.trim()) return;
-            this.data.todos.push({ text: input.value, done: false });
-            input.value = '';
-            this.saveData();
-            this.renderTodos();
-        },
+        // Render To-Dos
+        const todoList = document.getElementById('todo-list');
+        todoList.innerHTML = this.data.todos.map((t, i) => `
+            <li class="todo-item ${t.done ? 'completed' : ''}">
+                <input type="checkbox" class="todo-checkbox" ${t.done ? 'checked' : ''} onchange="App.toggleTodo(${i})">
+                <span>${t.text}</span>
+                <span class="delete-task" onclick="App.deleteTodo(${i})">×</span>
+            </li>
+        `).join('');
 
-        toggleTodo: function(index) {
-            this.data.todos[index].done = !this.data.todos[index].done;
-            this.saveData();
-            this.renderTodos();
-        },
+        // Render Saved Notes (Global)
+        const savedContainer = document.getElementById('saved-list');
+        let savedHtml = '';
+        let hasSaved = false;
 
-        deleteTodo: function(index) {
-            this.data.todos.splice(index, 1);
-            this.saveData();
-            this.renderTodos();
-        },
-
-        // Saved Notes (Favorites) Logic
-        renderSavedNotes: function() {
-            const list = document.getElementById('saved-list');
-            let favs = [];
-
-            // Iterate through all subjects and dates to find starred notes
-            for (let subject in this.data.notes) {
-                for (let date in this.data.notes[subject]) {
-                    this.data.notes[subject][date].forEach(n => {
-                        if(n.starred) favs.push({ ...n, subject, date });
-                    });
-                }
-            }
-
-            if (favs.length === 0) {
-                list.innerHTML = '<div style="color:#ccc; text-align:center; padding: 20px;">No saved notes yet.<br>Click the ★ on a note to save it.</div>';
-            } else {
-                list.innerHTML = favs.map(f => `
-                    <div class="saved-item" onclick="app.goToNote('${f.subject}', '${f.date}')">
-                        <h4>${f.title}</h4>
-                        <div class="meta">${f.subject} • ${f.date}</div>
-                    </div>
-                `).join('');
-            }
-        },
-
-        goToNote: function(subject, date) {
-            this.currentSubject = subject;
-            this.currentDate = new Date(date + 'T00:00:00');
-            this.viewDate = new Date(date + 'T00:00:00');
-            this.openSubject(subject); // This will re-render calendar and notes
-        },
-
-        // --- SUBJECT & CALENDAR LOGIC ---
-        openSubject: function(subjectName) {
-            this.currentSubject = subjectName;
-            document.getElementById('detail-title').innerText = subjectName;
+        for (const subjId in this.data.notes) {
+            const subject = this.data.subjects.find(s => s.id === subjId);
+            if (!subject) continue;
             
-            if (!this.data.notes[subjectName]) this.data.notes[subjectName] = {};
-            
-            this.currentDate = new Date();
-            this.viewDate = new Date();
-            
-            this.renderCalendar();
-            this.renderNotes();
-            this.navigate('detail');
-        },
-
-        renderCalendar: function() {
-            const year = this.viewDate.getFullYear();
-            const month = this.viewDate.getMonth();
-            
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            document.getElementById('cal-month-year').innerText = `${monthNames[month]} ${year}`;
-            
-            const grid = document.getElementById('cal-grid');
-            grid.innerHTML = '';
-
-            // Day Names
-            ['S','M','T','W','T','F','S'].forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
-
-            // First day logic
-            const firstDayIndex = new Date(year, month, 1).getDay();
-            const daysInMonth = 32 - new Date(year, month, 32).getDate();
-            const selectedStr = this.currentDate.toISOString().split('T')[0];
-
-            // Padding
-            for (let i=0; i<firstDayIndex; i++) grid.innerHTML += `<div class="cal-day"></div>`;
-
-            // Days
-            for (let i=1; i<=daysInMonth; i++) {
-                const tempDate = new Date(year, month, i);
-                const dateStr = tempDate.toISOString().split('T')[0];
-                
-                const hasNotes = this.data.notes[this.currentSubject][dateStr] && this.data.notes[this.currentSubject][dateStr].length > 0;
-                const isSelected = dateStr === selectedStr;
-
-                grid.innerHTML += `<div class="cal-day ${isSelected?'active':''} ${hasNotes?'has-notes':''}" onclick="app.selectDate('${dateStr}')">${i}</div>`;
-            }
-        },
-
-        changeMonth: function(delta) {
-            this.viewDate.setMonth(this.viewDate.getMonth() + delta);
-            this.renderCalendar();
-        },
-
-        selectDate: function(dateStr) {
-            this.currentDate = new Date(dateStr + 'T00:00:00');
-            this.renderCalendar();
-            this.renderNotes();
-        },
-
-        // --- NOTES LOGIC ---
-        renderNotes: function() {
-            const dateStr = this.currentDate.toISOString().split('T')[0];
-            const notes = this.data.notes[this.currentSubject][dateStr] || [];
-            
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('date-display').innerText = this.currentDate.toLocaleDateString('en-US', options);
-
-            const list = document.getElementById('notes-list');
-            
-            if (notes.length === 0) {
-                list.innerHTML = '<div style="text-align:center; color:#ccc; margin-top:20px;">No notes for this day.</div>';
-            } else {
-                list.innerHTML = notes.map(n => `
-                    <div class="note-item">
-                        <div class="note-actions">
-                            <button class="btn-icon btn-star ${n.starred ? 'active' : ''}" onclick="app.toggleStar('${dateStr}', '${n.id}')">★</button>
-                            <button class="btn-icon" onclick="app.editNote('${dateStr}', '${n.id}', '${n.title.replace(/'/g, "\\'")}', '${n.content.replace(/'/g, "\\'")}')">✎</button>
-                            <button class="btn-icon" onclick="app.deleteNote('${dateStr}', '${n.id}')">🗑</button>
-                        </div>
-                        <h4>${n.title}</h4>
-                        <p>${n.content}</p>
-                    </div>
-                `).join('');
-            }
-            this.clearForm();
-        },
-
-        saveNote: function() {
-            const title = document.getElementById('note-title').value.trim();
-            const content = document.getElementById('note-content').value.trim();
-            const editId = document.getElementById('edit-id').value;
-            const dateStr = this.currentDate.toISOString().split('T')[0];
-
-            if (!title || !content) return alert('Please enter title and content.');
-
-            if (!this.data.notes[this.currentSubject][dateStr]) this.data.notes[this.currentSubject][dateStr] = [];
-
-            if (editId) {
-                // Update Logic
-                const idx = this.data.notes[this.currentSubject][dateStr].findIndex(n => n.id == editId);
-                if (idx !== -1) {
-                    const isStarred = this.data.notes[this.currentSubject][dateStr][idx].starred;
-                    this.data.notes[this.currentSubject][dateStr][idx] = { id: editId, title, content, starred: isStarred };
-                }
-            } else {
-                // Create Logic
-                this.data.notes[this.currentSubject][dateStr].push({
-                    id: Date.now(),
-                    title: title,
-                    content: content,
-                    starred: false
+            for (const date in this.data.notes[subjId]) {
+                this.data.notes[subjId][date].forEach(n => {
+                    if (n.saved) {
+                        hasSaved = true;
+                        savedHtml += `
+                            <div class="saved-item" onclick="App.goToNote('${subjId}', '${date}')">
+                                <h4>${n.title}</h4>
+                                <div class="meta">${subject.name} • ${date}</div>
+                                <p>${n.content}</p>
+                            </div>`;
+                    }
                 });
             }
+        }
+        savedContainer.innerHTML = hasSaved ? savedHtml : '<div style="color:#ccc; text-align:center; width:100%;">No saved notes yet. Click the ★ on a note to save it.</div>';
+    },
 
-            this.saveData();
-            this.renderCalendar();
-            this.renderNotes();
-            this.renderSavedNotes(); // Update home widget
-        },
+    goToNote: function(subjId, date) {
+        this.currentSubject = subjId;
+        this.currentDate = new Date(date);
+        this.viewDate = new Date(date);
+        this.openSubject(subjId);
+    },
 
-        editNote: function(date, id, title, content) {
-            document.getElementById('note-title').value = title;
-            document.getElementById('note-content').value = content;
-            document.getElementById('edit-id').value = id;
+    // --- TODO LOGIC ---
+    addTodo: function() {
+        const input = document.getElementById('todo-input');
+        if(!input.value.trim()) return;
+        this.data.todos.push({ text: input.value, done: false });
+        input.value = '';
+        this.save();
+        this.renderHome();
+    },
+
+    toggleTodo: function(index) {
+        this.data.todos[index].done = !this.data.todos[index].done;
+        this.save();
+        this.renderHome();
+    },
+
+    deleteTodo: function(index) {
+        this.data.todos.splice(index, 1);
+        this.save();
+        this.renderHome();
+    },
+
+    // --- SUBJECT DETAIL LOGIC ---
+    openSubject: function(id) {
+        this.currentSubject = id;
+        const subject = this.data.subjects.find(s => s.id === id);
+        
+        if (!subject) return this.navigate('home');
+
+        document.getElementById('detail-title').innerText = subject.name;
+
+        if (!this.data.notes[id]) this.data.notes[id] = {};
+
+        this.viewDate = new Date();
+        this.currentDate = new Date();
+
+        this.renderCalendar();
+        this.renderNotes();
+        this.navigate('detail');
+    },
+
+    // Calendar Logic
+    renderCalendar: function() {
+        const year = this.viewDate.getFullYear();
+        const month = this.viewDate.getMonth();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        document.getElementById('cal-month-year').innerText = `${monthNames[month]} ${year}`;
+        
+        const grid = document.getElementById('cal-grid');
+        grid.innerHTML = '';
+
+        ['S','M','T','W','T','F','S'].forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const daysInMonth = 32 - new Date(year, month, 32).getDate();
+        const todayStr = new Date().toISOString().split('T')[0];
+        const selectedStr = this.currentDate.toISOString().split('T')[0];
+
+        for (let i=0; i<firstDayIndex; i++) grid.innerHTML += `<div class="cal-day"></div>`;
+
+        for (let i=1; i<=daysInMonth; i++) {
+            const tempDate = new Date(year, month, i);
+            const dateStr = tempDate.toISOString().split('T')[0];
             
+            const hasNotes = this.data.notes[this.currentSubject][dateStr] && this.data.notes[this.currentSubject][dateStr].length > 0;
+            const isSelected = dateStr === selectedStr;
+
+            grid.innerHTML += `<div class="cal-day ${isSelected?'active':''} ${hasNotes?'has-notes':''}" onclick="App.selectDate('${dateStr}')">${i}</div>`;
+        }
+    },
+
+    changeMonth: function(delta) {
+        this.viewDate.setMonth(this.viewDate.getMonth() + delta);
+        this.renderCalendar();
+    },
+
+    selectDate: function(dateStr) {
+        this.currentDate = new Date(dateStr + 'T00:00:00');
+        this.renderCalendar();
+        this.renderNotes();
+    },
+
+    // Notes Logic
+    renderNotes: function() {
+        const dateStr = this.currentDate.toISOString().split('T')[0];
+        const notes = this.data.notes[this.currentSubject][dateStr] || [];
+        
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date-display').innerText = this.currentDate.toLocaleDateString('en-US', options);
+
+        const list = document.getElementById('notes-list');
+        
+        if (notes.length === 0) {
+            list.innerHTML = '<div style="text-align:center; color:#ccc; margin-top:20px;">No notes for this day.</div>';
+        } else {
+            list.innerHTML = notes.map(n => `
+                <div class="note-item">
+                    <div class="note-actions">
+                        <button class="btn-icon btn-star ${n.saved ? 'active' : ''}" onclick="App.toggleStar('${dateStr}', '${n.id}')">★</button>
+                        <button class="btn-icon" onclick="App.editNote('${dateStr}', '${n.id}')">✎</button>
+                        <button class="btn-icon" onclick="App.deleteNote('${dateStr}', '${n.id}')">🗑</button>
+                    </div>
+                    <h4>${n.title}</h4>
+                    <p>${n.content}</p>
+                </div>
+            `).join('');
+        }
+        this.clearForm();
+    },
+
+    saveNote: function() {
+        const title = document.getElementById('note-title').value.trim();
+        const content = document.getElementById('note-content').value.trim();
+        const editId = document.getElementById('edit-note-id').value;
+        const dateStr = this.currentDate.toISOString().split('T')[0];
+
+        if (!title || !content) return alert('Please enter title and content.');
+
+        if (!this.data.notes[this.currentSubject][dateStr]) this.data.notes[this.currentSubject][dateStr] = [];
+
+        if (editId) {
+            const idx = this.data.notes[this.currentSubject][dateStr].findIndex(n => n.id === editId);
+            if (idx !== -1) {
+                const savedStatus = this.data.notes[this.currentSubject][dateStr][idx].saved;
+                this.data.notes[this.currentSubject][dateStr][idx] = { id: editId, title, content, saved: savedStatus };
+            }
+        } else {
+            this.data.notes[this.currentSubject][dateStr].push({
+                id: 'note_' + Date.now(),
+                title: title,
+                content: content,
+                saved: false
+            });
+        }
+
+        this.save();
+        this.renderCalendar();
+        this.renderNotes();
+        this.renderHome(); // Update saved notes widget on home
+    },
+
+    editNote: function(date, id) {
+        const note = this.data.notes[this.currentSubject][date].find(n => n.id === id);
+        if(note) {
+            document.getElementById('note-title').value = note.title;
+            document.getElementById('note-content').value = note.content;
+            document.getElementById('edit-note-id').value = note.id;
             const btn = document.querySelector('.btn-save');
             btn.innerText = "Update Note";
             btn.classList.add('btn-update');
-        },
-
-        deleteNote: function(date, id) {
-            if (!confirm('Delete this note?')) return;
-            this.data.notes[this.currentSubject][date] = this.data.notes[this.currentSubject][date].filter(n => n.id != id);
-            
-            // Clean up empty dates
-            if (this.data.notes[this.currentSubject][date].length === 0) {
-                delete this.data.notes[this.currentSubject][date];
-            }
-
-            this.saveData();
-            this.renderCalendar();
-            this.renderNotes();
-            this.renderSavedNotes();
-        },
-
-        toggleStar: function(date, id) {
-            const idx = this.data.notes[this.currentSubject][date].findIndex(n => n.id == id);
-            if(idx !== -1) {
-                this.data.notes[this.currentSubject][date][idx].starred = !this.data.notes[this.currentSubject][date][idx].starred;
-            }
-            this.saveData();
-            this.renderNotes();
-            this.renderSavedNotes();
-        },
-
-        clearForm: function() {
-            document.getElementById('note-title').value = '';
-            document.getElementById('note-content').value = '';
-            document.getElementById('edit-id').value = '';
-            const btn = document.querySelector('.btn-save');
-            btn.innerText = "Save Note";
-            btn.classList.remove('btn-update');
-        },
-
-        saveData: function() {
-            localStorage.setItem('smartNotesApp', JSON.stringify(this.data));
-        },
-
-        // --- AI ASSISTANT LOGIC ---
-        toggleAI: function() {
-            document.getElementById('ai-window').classList.toggle('open');
-        },
-
-        askAI: function() {
-            const input = document.getElementById('ai-input');
-            const question = input.value.trim();
-            if (!question) return;
-
-            this.addMsg('user', question);
-            input.value = '';
-
-            // Simulated Intelligence
-            setTimeout(() => {
-                let response = "I am currently a demo simulation. In a full version, I would analyze your notes and provide smart insights!";
-                
-                const q = question.toLowerCase();
-                if (q.includes("slope") || q.includes("math")) {
-                    response = "📐 **Math Explanation:**\nTo find the slope of a line:\n1. Identify two points.\n2. Use the formula m = (y2 - y1) / (x2 - x1).";
-                } 
-                else if (q.includes("photosynthesis")) {
-                    response = "🌱 **Science Concept:**\nPhotosynthesis converts light energy into chemical energy. The formula is:\n6CO2 + 6H2O + Light → C6H12O6 + 6O2.";
-                }
-                else if (q.includes("hello")) {
-                    response = "Hi there! 👋 How can I help you study today?";
-                }
-
-                this.addMsg('ai', response);
-            }, 800);
-        },
-
-        addMsg: function(type, text) {
-            const area = document.getElementById('chat-area');
-            const div = document.createElement('div');
-            div.className = `msg msg-${type}`;
-            div.innerText = text;
-            area.appendChild(div);
-            area.scrollTop = area.scrollHeight;
         }
-    };
+    },
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => app.init());
+    deleteNote: function(date, id) {
+        if (!confirm('Delete this note?')) return;
+        this.data.notes[this.currentSubject][date] = this.data.notes[this.currentSubject][date].filter(n => n.id !== id);
+        if (this.data.notes[this.currentSubject][date].length === 0) delete this.data.notes[this.currentSubject][date];
+        
+        this.save();
+        this.renderCalendar();
+        this.renderNotes();
+        this.renderHome();
+    },
+
+    toggleStar: function(date, id) {
+        const idx = this.data.notes[this.currentSubject][date].findIndex(n => n.id === id);
+        if(idx !== -1) {
+            this.data.notes[this.currentSubject][date][idx].saved = !this.data.notes[this.currentSubject][date][idx].saved;
+        }
+        this.save();
+        this.renderNotes();
+        this.renderHome();
+    },
+
+    clearForm: function() {
+        document.getElementById('note-title').value = '';
+        document.getElementById('note-content').value = '';
+        document.getElementById('edit-note-id').value = '';
+        const btn = document.querySelector('.btn-save');
+        btn.innerText = "Save Note";
+        btn.classList.remove('btn-update');
+    },
+
+    // --- AI LOGIC ---
+    toggleAI: function() {
+        document.getElementById('ai-window').classList.toggle('open');
+    },
+
+    addMsg: function(type, text) {
+        const area = document.getElementById('chat-area');
+        const div = document.createElement('div');
+        div.className = `msg msg-${type}`;
+        div.innerText = text;
+        area.appendChild(div);
+        area.scrollTop = area.scrollHeight;
+    },
+
+    askAI: function() {
+        const input = document.getElementById('ai-input');
+        const q = input.value.trim();
+        if (!q) return;
+
+        this.addMsg('user', q);
+        input.value = '';
+
+        setTimeout(() => {
+            const ans = this.processAI(q);
+            this.addMsg('ai', ans);
+        }, 600);
+    },
+
+    processAI: function(q) {
+        // 1. Math Check (Basic Arithmetic)
+        const mathPattern = /^[\d\s\+\-\*\/\.]+$/;
+        if (mathPattern.test(q)) {
+            try {
+                const result = Function('"use strict"; return (' + q + ')')();
+                if (typeof result === 'number' && !isNaN(result)) {
+                    return `The answer is: ${result} 🧮`;
+                }
+            } catch (e) {
+                return "I can solve basic arithmetic like 1+1 or 10-4.";
+            }
+        }
+
+        // 2. Keyword Check (Concepts)
+        const lowerQ = q.toLowerCase();
+
+        if (lowerQ.includes('photosynthesis')) {
+            return "Photosynthesis is the process used by plants to convert light energy into chemical energy 🌱.";
+        }
+        if (lowerQ.includes('psychology')) {
+            return "Psychology is the scientific study of the human mind and behavior 🧠.";
+        }
+        if (lowerQ.includes('pythagoras')) {
+            return "Pythagoras' theorem: a² + b² = c². It relates to the sides of a right-angled triangle 📐.";
+        }
+
+        // 3. Fallback
+        return "I can answer basic math (e.g., '12+5') or explain simple concepts. Try asking me '1+1' or 'photosynthesis'!";
+    }
+};
+
+// Start App
+window.onload = () => App.init();
+
 </script>
 </body>
 </html>
