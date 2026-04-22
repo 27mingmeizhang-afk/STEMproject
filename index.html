@@ -86,7 +86,7 @@
             text-align: center;
             cursor: pointer;
             position: relative;
-            min-height: 140px;
+            min-height: 150px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -98,12 +98,35 @@
         .subject-card:hover .icon { transform: scale(1.15); }
         .subject-card h3 { font-size: 1rem; color: #444; }
 
-        /* --- HOME: BOTTOM WIDGETS (TO-DO & SAVED) --- */
+        /* Custom Subject Delete Button */
+        .delete-subject-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid #ffd1dc;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            color: var(--accent-deep);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .subject-card:hover .delete-subject-btn { opacity: 1; }
+
+        /* Add Subject Card Style */
+        .add-subject-card { border: 2px dashed #ffd1dc; background: transparent; cursor: pointer; }
+        .add-subject-card:hover { background: rgba(255,255,255,0.4); }
+        .add-subject-card .icon { color: var(--accent-pink); }
+
+        /* --- HOME: BOTTOM WIDGETS --- */
         .widgets-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
-            margin-top: 2rem;
         }
 
         .widget-box { padding: 1.5rem; }
@@ -335,13 +358,13 @@
 const App = {
     data: {
         subjects: [
-            { id: 'math', name: 'Mathematics', icon: '📐' },
-            { id: 'eng', name: 'English', icon: '📖' },
-            { id: 'psy', name: 'Psychology', icon: '🧠' },
-            { id: 'env', name: 'Environmental Science', icon: '🌱' },
-            { id: 'soc', name: 'Social Studies', icon: '🌍' },
-            { id: 'self', name: 'Self-Study', icon: '🖋️' },
-            { id: 'free', name: 'Free Notes', icon: '📝' }
+            { id: 'math', name: 'Mathematics', icon: '📐', type: 'default' },
+            { id: 'eng', name: 'English', icon: '📖', type: 'default' },
+            { id: 'psy', name: 'Psychology', icon: '🧠', type: 'default' },
+            { id: 'env', name: 'Environmental Science', icon: '🌱', type: 'default' },
+            { id: 'soc', name: 'Social Studies', icon: '🌍', type: 'default' },
+            { id: 'self', name: 'Self-Study', icon: '🖋️', type: 'default' },
+            { id: 'free', name: 'Free Notes', icon: '📝', type: 'default' }
         ],
         notes: {}, // Structure: { subjectId: { 'YYYY-MM-DD': [ {id, title, content, saved} ] } }
         todos: []  // Global To-Dos
@@ -373,17 +396,27 @@ const App = {
     renderHome: function() {
         // Render Subjects
         const grid = document.getElementById('subjects-grid');
-        let subjectsHtml = '';
+        let html = '';
         
         this.data.subjects.forEach(s => {
-            subjectsHtml += `
+            html += `
                 <div class="glass subject-card" onclick="App.openSubject('${s.id}')">
+                    ${s.type === 'custom' ? `<button class="delete-subject-btn" onclick="event.stopPropagation(); App.deleteSubject('${s.id}')">×</button>` : ''}
                     <span class="icon">${s.icon}</span>
                     <h3>${s.name}</h3>
                 </div>
             `;
         });
-        grid.innerHTML = subjectsHtml;
+
+        // Add Subject Card
+        html += `
+            <div class="glass subject-card add-subject-card" onclick="App.addSubject()">
+                <span class="icon">➕</span>
+                <h3 style="color: var(--text-light)">Add Subject</h3>
+            </div>
+        `;
+
+        grid.innerHTML = html;
 
         // Render To-Dos
         const todoList = document.getElementById('todo-list');
@@ -426,6 +459,30 @@ const App = {
         this.currentDate = new Date(date);
         this.viewDate = new Date(date);
         this.openSubject(subjId);
+    },
+
+    addSubject: function() {
+        const name = prompt("Enter new subject name:");
+        if (name && name.trim()) {
+            const icons = ['📓', '📚', '🔬', '💻', '🎨', '📊', '🎸', '🧪'];
+            this.data.subjects.push({
+                id: 'sub_' + Date.now(),
+                name: name.trim(),
+                icon: icons[Math.floor(Math.random() * icons.length)],
+                type: 'custom'
+            });
+            this.save();
+            this.renderHome();
+        }
+    },
+
+    deleteSubject: function(id) {
+        if(confirm('Delete this subject and all its notes?')) {
+            this.data.subjects = this.data.subjects.filter(s => s.id !== id);
+            delete this.data.notes[id];
+            this.save();
+            this.renderHome();
+        }
     },
 
     // --- TODO LOGIC ---
